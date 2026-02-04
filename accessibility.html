@@ -407,14 +407,14 @@
         </header>
         
         <div class="tools-grid">
-            <div class="tool-card" onclick="openModal('voiceover')">
+            <div class="tool-card" id="voiceover-card">
                 <div class="tool-icon">🎙️</div>
                 <h2>VoiceOver Simulator</h2>
                 <p>Experience how screen readers navigate web content</p>
                 <button class="launch-btn">Launch Simulator</button>
             </div>
             
-            <div class="tool-card" onclick="openModal('contrast')">
+            <div class="tool-card" id="contrast-card">
                 <div class="tool-icon">🎨</div>
                 <h2>Color Contrast Checker</h2>
                 <p>Test color combinations against WCAG standards</p>
@@ -426,7 +426,7 @@
     <!-- VoiceOver Simulator Modal -->
     <div id="voiceover-modal" class="modal">
         <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('voiceover')" aria-label="Close VoiceOver Simulator">&times;</button>
+            <button class="close-btn" id="close-voiceover" aria-label="Close VoiceOver Simulator">&times;</button>
             <h2>🎙️ VoiceOver Simulator</h2>
             <p>Click on any element below to hear what a screen reader would announce. Use the navigation buttons to simulate keyboard navigation.</p>
             
@@ -443,11 +443,11 @@
                     </div>
                     
                     <div class="demo-element" data-vo="Link, Learn more about accessibility, clickable" tabindex="0">
-                        <a href="#">Learn more about accessibility</a>
+                        <a href="#" onclick="return false;">Learn more about accessibility</a>
                     </div>
                     
                     <div class="demo-element" data-vo="Button, Submit Form, clickable" tabindex="0">
-                        <button style="padding: 10px 20px; font-size: 1em;">Submit Form</button>
+                        <button type="button" style="padding: 10px 20px; font-size: 1em;">Submit Form</button>
                     </div>
                     
                     <div class="demo-element" data-vo="Image, A beautiful sunset over the ocean with orange and pink clouds" tabindex="0">
@@ -473,10 +473,14 @@
                 </div>
                 
                 <div class="controls">
-                    <button class="control-btn" onclick="previousElement()">⬆️ Previous Element</button>
-                    <button class="control-btn" onclick="nextElement()">⬇️ Next Element</button>
-                    <button class="control-btn" onclick="speakCurrent()">🔊 Repeat Current</button>
-                    <button class="control-btn" onclick="resetVoiceOver()">🔄 Reset</button>
+                    <button class="control-btn" id="btn-previous">⬆️ Previous Element</button>
+                    <button class="control-btn" id="btn-next">⬇️ Next Element</button>
+                    <button class="control-btn" id="btn-repeat">🔊 Repeat Current</button>
+                    <button class="control-btn" id="btn-reset">🔄 Reset</button>
+                </div>
+                
+                <div style="margin-top: 15px; padding: 15px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196F3;">
+                    <p style="color: #0d47a1; margin: 0;"><strong>🔊 Audio Enabled:</strong> This simulator will speak out loud using your browser's text-to-speech. Make sure your volume is turned up!</p>
                 </div>
                 
                 <div class="voiceover-output">
@@ -504,7 +508,7 @@
     <!-- Color Contrast Checker Modal -->
     <div id="contrast-modal" class="modal">
         <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('contrast')" aria-label="Close Contrast Checker">&times;</button>
+            <button class="close-btn" id="close-contrast" aria-label="Close Contrast Checker">&times;</button>
             <h2>🎨 Color Contrast Checker</h2>
             <p>Test color combinations to ensure they meet WCAG 2.1 accessibility standards.</p>
             
@@ -513,32 +517,32 @@
                     <div class="color-input-group">
                         <h4>Text Color (Foreground)</h4>
                         <div class="color-picker-wrapper">
-                            <input type="color" id="text-color" class="color-picker" value="#000000" onchange="updateContrast()">
+                            <input type="color" id="text-color" class="color-picker" value="#000000">
                             <div class="color-value">
-                                <input type="text" id="text-color-hex" value="#000000" oninput="updateFromHex('text')" placeholder="#000000">
+                                <input type="text" id="text-color-hex" value="#000000" placeholder="#000000">
                             </div>
                         </div>
                         <div class="preset-colors">
-                            <button class="preset-btn" onclick="setPreset('text', '#000000')">Black</button>
-                            <button class="preset-btn" onclick="setPreset('text', '#333333')">Dark Gray</button>
-                            <button class="preset-btn" onclick="setPreset('text', '#666666')">Gray</button>
-                            <button class="preset-btn" onclick="setPreset('text', '#FFFFFF')">White</button>
+                            <button class="preset-btn" data-type="text" data-color="#000000">Black</button>
+                            <button class="preset-btn" data-type="text" data-color="#333333">Dark Gray</button>
+                            <button class="preset-btn" data-type="text" data-color="#666666">Gray</button>
+                            <button class="preset-btn" data-type="text" data-color="#FFFFFF">White</button>
                         </div>
                     </div>
                     
                     <div class="color-input-group">
                         <h4>Background Color</h4>
                         <div class="color-picker-wrapper">
-                            <input type="color" id="bg-color" class="color-picker" value="#FFFFFF" onchange="updateContrast()">
+                            <input type="color" id="bg-color" class="color-picker" value="#FFFFFF">
                             <div class="color-value">
-                                <input type="text" id="bg-color-hex" value="#FFFFFF" oninput="updateFromHex('bg')" placeholder="#FFFFFF">
+                                <input type="text" id="bg-color-hex" value="#FFFFFF" placeholder="#FFFFFF">
                             </div>
                         </div>
                         <div class="preset-colors">
-                            <button class="preset-btn" onclick="setPreset('bg', '#FFFFFF')">White</button>
-                            <button class="preset-btn" onclick="setPreset('bg', '#F0F0F0')">Light Gray</button>
-                            <button class="preset-btn" onclick="setPreset('bg', '#007BFF')">Blue</button>
-                            <button class="preset-btn" onclick="setPreset('bg', '#000000')">Black</button>
+                            <button class="preset-btn" data-type="bg" data-color="#FFFFFF">White</button>
+                            <button class="preset-btn" data-type="bg" data-color="#F0F0F0">Light Gray</button>
+                            <button class="preset-btn" data-type="bg" data-color="#007BFF">Blue</button>
+                            <button class="preset-btn" data-type="bg" data-color="#000000">Black</button>
                         </div>
                     </div>
                 </div>
@@ -589,9 +593,9 @@
                 
                 <div style="margin-top: 20px; padding: 20px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196F3;">
                     <h4 style="color: #0d47a1; margin-bottom: 10px;">🎯 Quick Test Scenarios</h4>
-                    <button class="control-btn" onclick="loadScenario('pass')" style="margin: 5px;">Good Example</button>
-                    <button class="control-btn" onclick="loadScenario('fail')" style="margin: 5px; background: #e74c3c;">Poor Example</button>
-                    <button class="control-btn" onclick="loadScenario('borderline')" style="margin: 5px; background: #f39c12;">Borderline Example</button>
+                    <button class="control-btn" id="scenario-pass" style="margin: 5px;">Good Example</button>
+                    <button class="control-btn" id="scenario-fail" style="margin: 5px; background: #e74c3c;">Poor Example</button>
+                    <button class="control-btn" id="scenario-borderline" style="margin: 5px; background: #f39c12;">Borderline Example</button>
                 </div>
             </div>
         </div>
@@ -600,41 +604,113 @@
     <script>
         // VoiceOver Simulator Logic
         let currentIndex = -1;
-        let demoElements;
+        let demoElements = [];
         
-        // Wait for DOM to load
+        // Initialize after DOM loads
         document.addEventListener('DOMContentLoaded', function() {
-            demoElements = document.querySelectorAll('.demo-element');
+            console.log('DOM loaded, initializing...');
             
-            // Add click handlers to demo elements
+            // Get VoiceOver elements
+            demoElements = document.querySelectorAll('.demo-element');
+            console.log('Found', demoElements.length, 'demo elements');
+            
+            // Add event listeners to demo elements
             demoElements.forEach((element, index) => {
-                element.addEventListener('click', () => speakElement(element, index));
-                element.addEventListener('keypress', (e) => {
+                element.addEventListener('click', function() {
+                    console.log('Element clicked:', index);
+                    speakElement(element, index);
+                });
+                
+                element.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         speakElement(element, index);
                     }
                 });
             });
+            
+            // VoiceOver modal controls
+            document.getElementById('voiceover-card').addEventListener('click', function() {
+                document.getElementById('voiceover-modal').classList.add('active');
+            });
+            
+            document.getElementById('close-voiceover').addEventListener('click', function() {
+                document.getElementById('voiceover-modal').classList.remove('active');
+                resetVoiceOver();
+            });
+            
+            document.getElementById('btn-previous').addEventListener('click', previousElement);
+            document.getElementById('btn-next').addEventListener('click', nextElement);
+            document.getElementById('btn-repeat').addEventListener('click', speakCurrent);
+            document.getElementById('btn-reset').addEventListener('click', resetVoiceOver);
+            
+            // Contrast modal controls
+            document.getElementById('contrast-card').addEventListener('click', function() {
+                document.getElementById('contrast-modal').classList.add('active');
+                updateContrast();
+            });
+            
+            document.getElementById('close-contrast').addEventListener('click', function() {
+                document.getElementById('contrast-modal').classList.remove('active');
+            });
+            
+            // Color pickers
+            document.getElementById('text-color').addEventListener('input', updateContrast);
+            document.getElementById('bg-color').addEventListener('input', updateContrast);
+            document.getElementById('text-color-hex').addEventListener('input', function() {
+                updateFromHex('text');
+            });
+            document.getElementById('bg-color-hex').addEventListener('input', function() {
+                updateFromHex('bg');
+            });
+            
+            // Preset buttons
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const type = this.getAttribute('data-type');
+                    const color = this.getAttribute('data-color');
+                    setPreset(type, color);
+                });
+            });
+            
+            // Scenario buttons
+            document.getElementById('scenario-pass').addEventListener('click', function() {
+                loadScenario('pass');
+            });
+            document.getElementById('scenario-fail').addEventListener('click', function() {
+                loadScenario('fail');
+            });
+            document.getElementById('scenario-borderline').addEventListener('click', function() {
+                loadScenario('borderline');
+            });
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.remove('active');
+                }
+            });
+            
+            // Keyboard shortcuts for VoiceOver
+            document.addEventListener('keydown', function(e) {
+                const voModal = document.getElementById('voiceover-modal');
+                if (voModal.classList.contains('active')) {
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        nextElement();
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        previousElement();
+                    } else if (e.key === 'Escape') {
+                        voModal.classList.remove('active');
+                        resetVoiceOver();
+                    }
+                }
+            });
         });
         
-        function openModal(type) {
-            const modalId = type + '-modal';
-            document.getElementById(modalId).classList.add('active');
-            if (type === 'contrast') {
-                updateContrast();
-            }
-        }
-        
-        function closeModal(type) {
-            const modalId = type + '-modal';
-            document.getElementById(modalId).classList.remove('active');
-            if (type === 'voiceover') {
-                resetVoiceOver();
-            }
-        }
-        
         function speakElement(element, index) {
+            console.log('Speaking element:', index);
             const voText = element.getAttribute('data-vo');
             const output = document.getElementById('vo-output');
             output.textContent = voText;
@@ -648,6 +724,23 @@
             
             // Scroll element into view
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Actually speak the text using Web Speech API
+            speakText(voText);
+        }
+        
+        function speakText(text) {
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
+            
+            // Create a new speech utterance
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1.2; // Slightly faster like real screen readers
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            
+            // Speak it
+            window.speechSynthesis.speak(utterance);
         }
         
         function nextElement() {
@@ -666,10 +759,12 @@
             if (currentIndex >= 0 && currentIndex < demoElements.length) {
                 const voText = demoElements[currentIndex].getAttribute('data-vo');
                 document.getElementById('vo-output').textContent = voText;
+                speakText(voText);
             }
         }
         
         function resetVoiceOver() {
+            window.speechSynthesis.cancel(); // Stop any ongoing speech
             demoElements.forEach(el => el.classList.remove('vo-focus'));
             currentIndex = -1;
             document.getElementById('vo-output').textContent = 'Click on any element above or use the navigation buttons to begin...';
@@ -778,29 +873,6 @@
                     break;
             }
         }
-        
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('active');
-            }
-        }
-        
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            const voModal = document.getElementById('voiceover-modal');
-            if (voModal.classList.contains('active')) {
-                if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    nextElement();
-                } else if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    previousElement();
-                } else if (e.key === 'Escape') {
-                    closeModal('voiceover');
-                }
-            }
-        });
     </script>
 </body>
 </html>
