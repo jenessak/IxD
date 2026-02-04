@@ -549,10 +549,26 @@
                 
                 <div class="preview-section">
                     <h3>Preview</h3>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 10px;">Vision Filters:</h4>
+                        <div class="controls" style="margin-top: 0;">
+                            <button class="control-btn" id="filter-normal" style="background: #4caf50;">Normal Vision</button>
+                            <button class="control-btn" id="filter-protanopia">Protanopia (Red-Blind)</button>
+                            <button class="control-btn" id="filter-deuteranopia">Deuteranopia (Green-Blind)</button>
+                            <button class="control-btn" id="filter-tritanopia">Tritanopia (Blue-Blind)</button>
+                            <button class="control-btn" id="filter-achromatopsia">Achromatopsia (No Color)</button>
+                        </div>
+                    </div>
+                    
                     <div class="preview-box" id="preview-box">
                         <h3>Sample Heading Text</h3>
                         <p>This is regular body text. It should be easy to read with sufficient contrast between the text and background colors. WCAG requires a minimum contrast ratio of 4.5:1 for normal text and 3:1 for large text (18pt+ or 14pt+ bold).</p>
                     </div>
+                    
+                    <p id="filter-description" style="margin-top: 15px; padding: 15px; background: #f0f0f0; border-radius: 5px; color: #333; font-style: italic;">
+                        <strong>Normal Vision:</strong> Viewing colors as most people see them.
+                    </p>
                 </div>
                 
                 <div class="results-section">
@@ -682,6 +698,23 @@
             });
             document.getElementById('scenario-borderline').addEventListener('click', function() {
                 loadScenario('borderline');
+            });
+            
+            // Vision filter buttons
+            document.getElementById('filter-normal').addEventListener('click', function() {
+                applyVisionFilter('normal');
+            });
+            document.getElementById('filter-protanopia').addEventListener('click', function() {
+                applyVisionFilter('protanopia');
+            });
+            document.getElementById('filter-deuteranopia').addEventListener('click', function() {
+                applyVisionFilter('deuteranopia');
+            });
+            document.getElementById('filter-tritanopia').addEventListener('click', function() {
+                applyVisionFilter('tritanopia');
+            });
+            document.getElementById('filter-achromatopsia').addEventListener('click', function() {
+                applyVisionFilter('achromatopsia');
             });
             
             // Close modals when clicking outside
@@ -872,6 +905,117 @@
                     setPreset('bg', '#FFFFFF');
                     break;
             }
+        }
+        
+        function applyVisionFilter(filterType) {
+            const previewBox = document.getElementById('preview-box');
+            const filterDescription = document.getElementById('filter-description');
+            const textColor = document.getElementById('text-color').value;
+            const bgColor = document.getElementById('bg-color').value;
+            
+            // Reset all filter button styles
+            document.querySelectorAll('[id^="filter-"]').forEach(btn => {
+                btn.style.background = '#3498db';
+            });
+            document.getElementById('filter-' + filterType).style.background = '#4caf50';
+            
+            let filteredTextColor = textColor;
+            let filteredBgColor = bgColor;
+            let description = '';
+            
+            switch(filterType) {
+                case 'normal':
+                    // No filter
+                    description = '<strong>Normal Vision:</strong> Viewing colors as most people see them.';
+                    break;
+                    
+                case 'protanopia':
+                    // Red-blind (affects ~1% of males)
+                    filteredTextColor = simulateProtanopia(textColor);
+                    filteredBgColor = simulateProtanopia(bgColor);
+                    description = '<strong>Protanopia (Red-Blind):</strong> Difficulty distinguishing red and green. Affects about 1% of males. Red appears more gray or brown.';
+                    break;
+                    
+                case 'deuteranopia':
+                    // Green-blind (affects ~1% of males)
+                    filteredTextColor = simulateDeuteranopia(textColor);
+                    filteredBgColor = simulateDeuteranopia(bgColor);
+                    description = '<strong>Deuteranopia (Green-Blind):</strong> Most common form of color blindness. Difficulty distinguishing red and green. Affects about 1% of males.';
+                    break;
+                    
+                case 'tritanopia':
+                    // Blue-blind (rare, affects ~0.001%)
+                    filteredTextColor = simulateTritanopia(textColor);
+                    filteredBgColor = simulateTritanopia(bgColor);
+                    description = '<strong>Tritanopia (Blue-Blind):</strong> Difficulty distinguishing blue and yellow. Rare condition affecting about 0.001% of people.';
+                    break;
+                    
+                case 'achromatopsia':
+                    // Complete color blindness (very rare)
+                    filteredTextColor = simulateAchromatopsia(textColor);
+                    filteredBgColor = simulateAchromatopsia(bgColor);
+                    description = '<strong>Achromatopsia (Complete Color Blindness):</strong> No color vision - sees only shades of gray. Very rare condition.';
+                    break;
+            }
+            
+            previewBox.style.color = filteredTextColor;
+            previewBox.style.backgroundColor = filteredBgColor;
+            filterDescription.innerHTML = description;
+        }
+        
+        // Color blindness simulation functions
+        function simulateProtanopia(hexColor) {
+            const rgb = hexToRgb(hexColor);
+            if (!rgb) return hexColor;
+            
+            // Protanopia transformation matrix
+            const r = 0.56667 * rgb.r + 0.43333 * rgb.g + 0.00000 * rgb.b;
+            const g = 0.55833 * rgb.r + 0.44167 * rgb.g + 0.00000 * rgb.b;
+            const b = 0.00000 * rgb.r + 0.24167 * rgb.g + 0.75833 * rgb.b;
+            
+            return rgbToHex(Math.round(r), Math.round(g), Math.round(b));
+        }
+        
+        function simulateDeuteranopia(hexColor) {
+            const rgb = hexToRgb(hexColor);
+            if (!rgb) return hexColor;
+            
+            // Deuteranopia transformation matrix
+            const r = 0.625 * rgb.r + 0.375 * rgb.g + 0.0 * rgb.b;
+            const g = 0.7 * rgb.r + 0.3 * rgb.g + 0.0 * rgb.b;
+            const b = 0.0 * rgb.r + 0.3 * rgb.g + 0.7 * rgb.b;
+            
+            return rgbToHex(Math.round(r), Math.round(g), Math.round(b));
+        }
+        
+        function simulateTritanopia(hexColor) {
+            const rgb = hexToRgb(hexColor);
+            if (!rgb) return hexColor;
+            
+            // Tritanopia transformation matrix
+            const r = 0.95 * rgb.r + 0.05 * rgb.g + 0.0 * rgb.b;
+            const g = 0.0 * rgb.r + 0.43333 * rgb.g + 0.56667 * rgb.b;
+            const b = 0.0 * rgb.r + 0.475 * rgb.g + 0.525 * rgb.b;
+            
+            return rgbToHex(Math.round(r), Math.round(g), Math.round(b));
+        }
+        
+        function simulateAchromatopsia(hexColor) {
+            const rgb = hexToRgb(hexColor);
+            if (!rgb) return hexColor;
+            
+            // Convert to grayscale using luminance
+            const gray = Math.round(0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b);
+            
+            return rgbToHex(gray, gray, gray);
+        }
+        
+        function rgbToHex(r, g, b) {
+            r = Math.max(0, Math.min(255, r));
+            g = Math.max(0, Math.min(255, g));
+            b = Math.max(0, Math.min(255, b));
+            
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
         }
     </script>
 </body>
