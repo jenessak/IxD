@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poorly Designed Forms - Student Exercise</title>
+    <title>Poorly Designed Forms - Accessibility Testing Tools</title>
     <style>
         * {
             margin: 0;
@@ -43,7 +43,7 @@
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
 
@@ -65,6 +65,130 @@
 
         .nav-btn.active {
             background: #27ae60;
+        }
+
+        /* Accessibility Tools Panel */
+        .tools-panel {
+            background: #34495e;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .tools-title {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .tool-section {
+            margin-bottom: 15px;
+        }
+
+        .tool-label {
+            color: #ecf0f1;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .tool-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tool-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .tool-btn:hover {
+            background: #2980b9;
+        }
+
+        .tool-btn.active {
+            background: #27ae60;
+        }
+
+        .tool-btn.voiceover {
+            background: #9b59b6;
+        }
+
+        .tool-btn.voiceover:hover {
+            background: #8e44ad;
+        }
+
+        .tool-btn.voiceover.active {
+            background: #e74c3c;
+        }
+
+        /* Screen Reader Output */
+        .sr-output {
+            display: none;
+            background: #2c3e50;
+            color: #2ecc71;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid #27ae60;
+        }
+
+        .sr-output.active {
+            display: block;
+        }
+
+        .sr-output-title {
+            color: #3498db;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .sr-item {
+            margin-bottom: 8px;
+            padding-left: 10px;
+            border-left: 3px solid #27ae60;
+        }
+
+        .sr-speaking {
+            background: #34495e;
+            padding: 3px 6px;
+            border-radius: 3px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Color Blindness Filters */
+        .filter-protanopia {
+            filter: url('#protanopia');
+        }
+
+        .filter-deuteranopia {
+            filter: url('#deuteranopia');
+        }
+
+        .filter-tritanopia {
+            filter: url('#tritanopia');
+        }
+
+        .filter-grayscale {
+            filter: grayscale(100%);
         }
 
         .form-container {
@@ -259,9 +383,63 @@
     </style>
 </head>
 <body>
+    <!-- SVG Filters for Color Blindness Simulation -->
+    <svg style="display:none;">
+        <defs>
+            <!-- Protanopia (Red-Blind) -->
+            <filter id="protanopia">
+                <feColorMatrix type="matrix" values="0.567, 0.433, 0,     0, 0
+                                                      0.558, 0.442, 0,     0, 0
+                                                      0,     0.242, 0.758, 0, 0
+                                                      0,     0,     0,     1, 0"/>
+            </filter>
+            <!-- Deuteranopia (Green-Blind) -->
+            <filter id="deuteranopia">
+                <feColorMatrix type="matrix" values="0.625, 0.375, 0,   0, 0
+                                                      0.7,   0.3,   0,   0, 0
+                                                      0,     0.3,   0.7, 0, 0
+                                                      0,     0,     0,   1, 0"/>
+            </filter>
+            <!-- Tritanopia (Blue-Blind) -->
+            <filter id="tritanopia">
+                <feColorMatrix type="matrix" values="0.95, 0.05,  0,     0, 0
+                                                      0,    0.433, 0.567, 0, 0
+                                                      0,    0.475, 0.525, 0, 0
+                                                      0,    0,     0,     1, 0"/>
+            </filter>
+        </defs>
+    </svg>
+
     <div class="container">
         <h1>Poorly Designed Forms</h1>
-        <p class="subtitle">Identify the Accessibility Issues</p>
+        <p class="subtitle">Identify Accessibility Issues Using Testing Tools</p>
+
+        <!-- Accessibility Tools Panel -->
+        <div class="tools-panel">
+            <div class="tools-title">🔧 Accessibility Testing Tools</div>
+            
+            <div class="tool-section">
+                <span class="tool-label">Color Blindness Simulation:</span>
+                <div class="tool-buttons">
+                    <button class="tool-btn active" onclick="setColorFilter('none')">Normal Vision</button>
+                    <button class="tool-btn" onclick="setColorFilter('protanopia')">Protanopia (Red-Blind)</button>
+                    <button class="tool-btn" onclick="setColorFilter('deuteranopia')">Deuteranopia (Green-Blind)</button>
+                    <button class="tool-btn" onclick="setColorFilter('tritanopia')">Tritanopia (Blue-Blind)</button>
+                    <button class="tool-btn" onclick="setColorFilter('grayscale')">Grayscale</button>
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <span class="tool-label">Screen Reader Simulation:</span>
+                <div class="tool-buttons">
+                    <button class="tool-btn voiceover" onclick="toggleVoiceOver()">Toggle Screen Reader View</button>
+                </div>
+                <div id="sr-output" class="sr-output">
+                    <div class="sr-output-title">Screen Reader Output:</div>
+                    <div id="sr-content"></div>
+                </div>
+            </div>
+        </div>
 
         <div class="nav-buttons">
             <button class="nav-btn active" onclick="showForm(1)">Form 1</button>
@@ -294,7 +472,7 @@
         </div>
 
         <!-- Form 2 -->
-        <div id="form2" class="form-container">
+        <div id="form2-container" class="form-container">
             <h2 class="form-title">Form 2</h2>
             <div class="instructions">
                 Examine this form and identify all accessibility issues you can find.
@@ -316,7 +494,7 @@
         </div>
 
         <!-- Form 3 -->
-        <div id="form3" class="form-container">
+        <div id="form3-container" class="form-container">
             <h2 class="form-title">Form 3</h2>
             <div class="instructions">
                 Examine this form and identify all accessibility issues you can find.
@@ -341,7 +519,7 @@
         </div>
 
         <!-- Form 4 -->
-        <div id="form4" class="form-container">
+        <div id="form4-container" class="form-container">
             <h2 class="form-title">Form 4</h2>
             <div class="instructions">
                 Examine this form and identify all accessibility issues you can find.
@@ -363,7 +541,7 @@
         </div>
 
         <!-- Form 5 -->
-        <div id="form5" class="form-container">
+        <div id="form5-container" class="form-container">
             <h2 class="form-title">Form 5</h2>
             <div class="instructions">
                 Examine this form and identify all accessibility issues you can find.
@@ -426,7 +604,13 @@
     </div>
 
     <script>
+        let currentFilter = 'none';
+        let voiceOverActive = false;
+        let currentFormNumber = 1;
+
         function showForm(formNumber) {
+            currentFormNumber = formNumber;
+            
             // Hide all forms
             const forms = document.querySelectorAll('.form-container');
             forms.forEach(form => form.classList.remove('active'));
@@ -436,16 +620,184 @@
             buttons.forEach(btn => btn.classList.remove('active'));
             
             // Show selected form
-            const targetForm = formNumber === 6 ? 
-                document.getElementById('form6-container') : 
-                document.getElementById('form' + formNumber);
+            let targetForm;
+            if (formNumber === 1) {
+                targetForm = document.getElementById('form1');
+            } else {
+                targetForm = document.getElementById('form' + formNumber + '-container');
+            }
             targetForm.classList.add('active');
             
             // Add active class to clicked button
             buttons[formNumber - 1].classList.add('active');
             
+            // Update voice over if active
+            if (voiceOverActive) {
+                analyzeFormAccessibility();
+            }
+            
             // Scroll to top of form
             targetForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function setColorFilter(filterType) {
+            currentFilter = filterType;
+            
+            // Remove all filter classes
+            const formBoxes = document.querySelectorAll('.form-box');
+            formBoxes.forEach(box => {
+                box.classList.remove('filter-protanopia', 'filter-deuteranopia', 'filter-tritanopia', 'filter-grayscale');
+            });
+            
+            // Apply new filter
+            if (filterType !== 'none') {
+                formBoxes.forEach(box => {
+                    box.classList.add('filter-' + filterType);
+                });
+            }
+            
+            // Update button states
+            const filterButtons = document.querySelectorAll('.tool-section:first-child .tool-btn');
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function toggleVoiceOver() {
+            voiceOverActive = !voiceOverActive;
+            const output = document.getElementById('sr-output');
+            const button = event.target;
+            
+            if (voiceOverActive) {
+                output.classList.add('active');
+                button.classList.add('active');
+                button.textContent = 'Stop Screen Reader View';
+                analyzeFormAccessibility();
+            } else {
+                output.classList.remove('active');
+                button.classList.remove('active');
+                button.textContent = 'Toggle Screen Reader View';
+            }
+        }
+
+        function analyzeFormAccessibility() {
+            const content = document.getElementById('sr-content');
+            content.innerHTML = '';
+            
+            let activeForm;
+            if (currentFormNumber === 1) {
+                activeForm = document.querySelector('#form1 form');
+            } else {
+                activeForm = document.querySelector('#form' + currentFormNumber + '-container form') || 
+                            document.querySelector('#form' + currentFormNumber);
+            }
+            
+            if (!activeForm) return;
+            
+            const elements = activeForm.querySelectorAll('label, input, select, button, .image-label');
+            
+            elements.forEach((element, index) => {
+                const div = document.createElement('div');
+                div.className = 'sr-item';
+                
+                if (element.tagName === 'LABEL') {
+                    const forAttr = element.getAttribute('for');
+                    const labelText = element.textContent.trim();
+                    if (labelText) {
+                        div.innerHTML = `<span class="sr-speaking">Label: "${labelText}"</span>`;
+                    } else {
+                        div.innerHTML = `<span class="sr-speaking">Label (empty or unclear)</span>`;
+                    }
+                    if (!forAttr) {
+                        div.innerHTML += ' <span style="color: #e74c3c;">[Warning: No "for" attribute]</span>';
+                    }
+                }
+                else if (element.classList.contains('image-label')) {
+                    div.innerHTML = `<span class="sr-speaking">Unlabeled content (possibly decorative)</span> <span style="color: #e74c3c;">[Warning: Not accessible]</span>`;
+                }
+                else if (element.tagName === 'INPUT') {
+                    const type = element.type;
+                    const name = element.name;
+                    const placeholder = element.placeholder;
+                    const value = element.value;
+                    const required = element.required;
+                    const id = element.id;
+                    const ariaLabel = element.getAttribute('aria-label');
+                    
+                    let announcement = `<span class="sr-speaking">${type} field`;
+                    
+                    if (ariaLabel) {
+                        announcement += `, ${ariaLabel}`;
+                    } else if (id) {
+                        const label = document.querySelector(`label[for="${id}"]`);
+                        if (label) {
+                            announcement += `, ${label.textContent.trim()}`;
+                        } else {
+                            announcement += ` <span style="color: #e74c3c;">[Unlabeled]</span>`;
+                        }
+                    } else if (!element.closest('label')) {
+                        announcement += ` <span style="color: #e74c3c;">[Unlabeled]</span>`;
+                    }
+                    
+                    if (required) {
+                        announcement += `, <span style="color: #e74c3c;">required</span>`;
+                    }
+                    
+                    if (placeholder) {
+                        announcement += `, placeholder: "${placeholder}"`;
+                    }
+                    
+                    announcement += '</span>';
+                    div.innerHTML = announcement;
+                }
+                else if (element.tagName === 'SELECT') {
+                    const name = element.name;
+                    const required = element.required;
+                    const id = element.id;
+                    
+                    let announcement = `<span class="sr-speaking">Dropdown menu`;
+                    
+                    if (id) {
+                        const label = document.querySelector(`label[for="${id}"]`);
+                        if (label) {
+                            announcement += `, ${label.textContent.trim()}`;
+                        } else {
+                            announcement += ` <span style="color: #e74c3c;">[Unlabeled]</span>`;
+                        }
+                    } else if (!element.closest('label')) {
+                        announcement += ` <span style="color: #e74c3c;">[Unlabeled]</span>`;
+                    }
+                    
+                    if (required) {
+                        announcement += `, <span style="color: #e74c3c;">required</span>`;
+                    }
+                    
+                    announcement += '</span>';
+                    div.innerHTML = announcement;
+                }
+                else if (element.tagName === 'BUTTON') {
+                    const text = element.textContent.trim();
+                    const ariaLabel = element.getAttribute('aria-label');
+                    
+                    if (text || ariaLabel) {
+                        div.innerHTML = `<span class="sr-speaking">Button: "${text || ariaLabel}"</span>`;
+                    } else {
+                        div.innerHTML = `<span class="sr-speaking">Button</span> <span style="color: #e74c3c;">[Warning: No accessible text]</span>`;
+                    }
+                }
+                
+                content.appendChild(div);
+            });
+            
+            // Add summary
+            const summary = document.createElement('div');
+            summary.style.marginTop = '15px';
+            summary.style.paddingTop = '15px';
+            summary.style.borderTop = '1px solid #27ae60';
+            summary.style.color = '#3498db';
+            
+            const unlabeledCount = content.querySelectorAll('[style*="color: #e74c3c"]').length;
+            summary.innerHTML = `<strong>Summary:</strong> Found ${unlabeledCount} accessibility warning(s)`;
+            content.appendChild(summary);
         }
 
         // Prevent actual form submission
