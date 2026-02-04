@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IxD 1200 - Interaction Design Course</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        /* Header Styles */
+        .course-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .course-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .course-header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        /* Quick Links Navigation */
+        .quick-links {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .quick-links h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        
+        .quick-link-btn {
+            padding: 10px 15px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+        
+        .quick-link-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        /* Control Buttons */
+        .control-buttons {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            padding: 10px 20px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background: #34495e;
+        }
+        
+        /* Week Module Styles */
+        .week-module {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border-left: 5px solid #3498db;
+        }
+        
+        .week-header {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            transition: background 0.3s ease;
+        }
+        
+        .week-header:hover {
+            background: #e9ecef;
+        }
+        
+        .week-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .week-dates {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .toggle-icon {
+            font-size: 1.5em;
+            color: #3498db;
+            transition: transform 0.3s ease;
+        }
+        
+        .week-module.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+        
+        .week-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        
+        .week-module.active .week-content {
+            max-height: 3000px;
+        }
+        
+        .week-content-inner {
+            padding: 25px;
+        }
+        
+        /* Day Sections */
+        .day-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .day-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .day-title {
+            font-size: 1.2em;
+            color: #3498db;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        /* Resource Links */
+        .resource-list {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .resource-item {
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .resource-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .resource-item a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            flex: 1;
+        }
+        
+        .resource-item a:hover {
+            text-decoration: underline;
+        }
+        
+        .resource-icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .status-current {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .status-upcoming {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .status-completed {
+            background: #9e9e9e;
+            color: white;
+        }
+        
+        /* Footer */
+        .course-footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #7f8c8d;
+            margin-top: 40px;
+            border-top: 2px solid #e9ecef;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .course-header h1 {
+                font-size: 1.8em;
+            }
+            
+            .week-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .toggle-icon {
+                align-self: flex-end;
+            }
+            
+            .quick-links-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Course Header -->
+    <div class="course-header">
+        <h1>IxD 1200 - Interaction Design</h1>
+        <p class="subtitle">SUCCESS Academy | Spring 2026</p>
+    </div>
+    
+    <div class="container">
+        <!-- Quick Links -->
+        <div class="quick-links">
+            <h3>🔗 Quick Navigation</h3>
+            <div class="quick-links-grid">
+                <a href="#week1" class="quick-link-btn">Week 1</a>
+                <a href="#week2" class="quick-link-btn">Week 2</a>
+                <a href="#week3" class="quick-link-btn">Week 3</a>
+                <a href="#week4" class="quick-link-btn">Week 4</a>
+                <a href="#week5" class="quick-link-btn">Week 5</a>
+                <a href="#week6" class="quick-link-btn">Week 6</a>
+                <a href="#week7" class="quick-link-btn">Week 7</a>
+                <a href="#week8" class="quick-link-btn">Week 8</a>
+                <a href="#week9" class="quick-link-btn">Week 9</a>
+                <a href="#week10" class="quick-link-btn">Week 10</a>
+                <a href="#week11" class="quick-link-btn">Week 11</a>
+                <a href="#week12" class="quick-link-btn">Week 12</a>
+                <a href="#week13" class="quick-link-btn">Week 13</a>
+                <a href="#week14" class="quick-link-btn">Week 14</a>
+                <a href="#week15" class="quick-link-btn">Week 15</a>
+                <a href="#week16" class="quick-link-btn">Week 16</a>
+            </div>
+        </div>
+        
+        <!-- Control Buttons -->
+        <div class="control-buttons">
+            <button class="control-btn" onclick="expandAll()">📖 Expand All Weeks</button>
+            <button class="control-btn" onclick="collapseAll()">📕 Collapse All Weeks</button>
+        </div>
+        
+        <!-- Week 1 -->
+        <div class="week-module" id="week1">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 1: Introduction to Interaction Design <span class="status-badge status-completed">Completed</span></div>
+                    <div class="week-dates">January 13 - January 17, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, January 13</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 2</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, January 15</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 2 -->
+        <div class="week-module" id="week2">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 2: User Research Methods <span class="status-badge status-completed">Completed</span></div>
+                    <div class="week-dates">January 20 - January 24, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, January 20</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, January 22</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 3 -->
+        <div class="week-module" id="week3">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 3: Personas & User Journey Mapping <span class="status-badge status-completed">Completed</span></div>
+                    <div class="week-dates">January 27 - January 31, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, January 27</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, January 29</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 4 - ACCESSIBILITY WEEK -->
+        <div class="week-module active" id="week4">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 4: Accessibility & Inclusive Design <span class="status-badge status-current">Current Week</span></div>
+                    <div class="week-dates">February 3 - February 7, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, February 3</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, February 5</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">🎙️</span>
+                                <a href="interactive-accessibility-tools.html" target="_blank">Interactive Accessibility Testing Tools</a>
+                            </li>
+                            <li class="resource-item">
+                                <span class="resource-icon">📊</span>
+                                <a href="accessibility-demo.html" target="_blank">Before & After Accessibility Examples</a>
+                            </li>
+                            <li class="resource-item">
+                                <span class="resource-icon">🔧</span>
+                                <a href="https://wave.webaim.org/" target="_blank">WAVE Evaluation Tool</a>
+                            </li>
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank">WCAG 2.1 Quick Reference</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 5 -->
+        <div class="week-module" id="week5">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 5: Wireframing & Prototyping <span class="status-badge status-upcoming">Upcoming</span></div>
+                    <div class="week-dates">February 10 - February 14, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, February 10</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, February 12</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 6 -->
+        <div class="week-module" id="week6">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 6: Usability Testing <span class="status-badge status-upcoming">Upcoming</span></div>
+                    <div class="week-dates">February 17 - February 21, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, February 17</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, February 19</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 7 -->
+        <div class="week-module" id="week7">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 7: Information Architecture <span class="status-badge status-upcoming">Upcoming</span></div>
+                    <div class="week-dates">February 24 - February 28, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, February 24</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, February 26</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 8 -->
+        <div class="week-module" id="week8">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 8: Visual Design Principles <span class="status-badge status-upcoming">Upcoming</span></div>
+                    <div class="week-dates">March 3 - March 7, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, March 3</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, March 5</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 9 -->
+        <div class="week-module" id="week9">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 9: Interaction Patterns <span class="status-badge status-upcoming">Upcoming</span></div>
+                    <div class="week-dates">March 10 - March 14, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, March 10</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, March 12</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 10 -->
+        <div class="week-module" id="week10">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 10: Mobile & Responsive Design <span class="status-badge status-upcoming">Upcoming</span></div>
+                    <div class="week-dates">March 17 - March 21, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, March 17</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, March 19</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 11 -->
+        <div class="week-module" id="week11">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 11: Design Systems <span class="status-badge status-upcoming">Upcoming</span></div>
+                    <div class="week-dates">March 24 - March 28, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, March 24</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, March 26</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 12 -->
+        <div class="week-module" id="week12">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 12: Microinteractions & Animation <span class="status-badge status-upcoming">Upcoming</span></div>
+                    <div class="week-dates">March 31 - April 4, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, March 31</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, April 2</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 13 -->
+        <div class="week-module" id="week13">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 13: Content Strategy <span class="status-badge status-upcoming">Upcoming</span></div>
+                    <div class="week-dates">April 7 - April 11, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, April 7</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, April 9</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 14 -->
+        <div class="week-module" id="week14">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 14: Portfolio & Case Studies <span class="status-badge status-upcoming">Upcoming</span></div>
+                    <div class="week-dates">April 14 - April 18, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, April 14</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, April 16</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 15 -->
+        <div class="week-module" id="week15">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 15: Final Project Work <span class="status-badge status-upcoming">Upcoming</span></div>
+                    <div class="week-dates">April 21 - April 25, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, April 21</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, April 23</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Week 16 -->
+        <div class="week-module" id="week16">
+            <div class="week-header" onclick="toggleWeek(this)">
+                <div>
+                    <div class="week-title">Week 16: Final Presentations <span class="status-badge status-upcoming">Upcoming</span></div>
+                    <div class="week-dates">April 28 - May 2, 2026</div>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="week-content">
+                <div class="week-content-inner">
+                    <div class="day-section">
+                        <h3 class="day-title">Monday, April 28</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="day-section">
+                        <h3 class="day-title">Wednesday, April 30</h3>
+                        <ul class="resource-list">
+                            <li class="resource-item">
+                                <span class="resource-icon">📄</span>
+                                <a href="#">Link 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Course Footer -->
+        <div class="course-footer">
+            <p>IxD 1200 - Interaction Design | Spring 2026 | SUCCESS Academy</p>
+            <p style="margin-top: 10px;">Last Updated: February 3, 2026</p>
+        </div>
+    </div>
+    
+    <script>
+        // Toggle individual week
+        function toggleWeek(element) {
+            const weekModule = element.parentElement;
+            weekModule.classList.toggle('active');
+        }
+        
+        // Expand all weeks
+        function expandAll() {
+            const allWeeks = document.querySelectorAll('.week-module');
+            allWeeks.forEach(week => {
+                week.classList.add('active');
+            });
+        }
+        
+        // Collapse all weeks
+        function collapseAll() {
+            const allWeeks = document.querySelectorAll('.week-module');
+            allWeeks.forEach(week => {
+                week.classList.remove('active');
+            });
+        }
+        
+        // Smooth scroll for quick links
+        document.querySelectorAll('.quick-link-btn').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    // Expand the week if it's collapsed
+                    targetElement.classList.add('active');
+                    
+                    // Scroll to the element
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Auto-scroll to current week on page load
+        window.addEventListener('load', function() {
+            const currentWeek = document.querySelector('.status-current');
+            if (currentWeek) {
+                setTimeout(() => {
+                    currentWeek.closest('.week-module').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>
