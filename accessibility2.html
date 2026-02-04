@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility Before & After Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .intro {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .demo-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .demo-section h2 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #e74c3c;
+        }
+        
+        .demo-section.after h2 {
+            border-bottom-color: #27ae60;
+        }
+        
+        .demo-section.before {
+            border: 3px solid #e74c3c;
+        }
+        
+        .demo-section.after {
+            border: 3px solid #27ae60;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        
+        .badge.bad {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .badge.good {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .issue-list {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .issue-list h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .issue-list ul {
+            margin-left: 20px;
+            color: #856404;
+        }
+        
+        .issue-list li {
+            margin: 5px 0;
+        }
+        
+        .fix-list {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .fix-list h3 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
+        
+        .fix-list ul {
+            margin-left: 20px;
+            color: #155724;
+        }
+        
+        .fix-list li {
+            margin: 5px 0;
+        }
+        
+        /* Example 1: Low Contrast Text */
+        .example-box {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
+        
+        .low-contrast {
+            color: #cccccc;
+            background: #ffffff;
+        }
+        
+        .good-contrast {
+            color: #212529;
+            background: #ffffff;
+        }
+        
+        /* Example 2: Non-descriptive Links */
+        .link-example {
+            margin: 15px 0;
+        }
+        
+        /* Example 3: Missing Form Labels */
+        .form-example {
+            margin: 20px 0;
+        }
+        
+        .form-example input,
+        .form-example select {
+            padding: 8px;
+            margin: 5px 0;
+            width: 100%;
+            max-width: 300px;
+            font-size: 1em;
+        }
+        
+        .form-example label {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        /* Example 4: Images */
+        .image-example {
+            margin: 20px 0;
+        }
+        
+        .image-example img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        /* Example 5: Heading Structure */
+        .heading-example h3 {
+            font-size: 1.3em;
+            margin: 15px 0 10px;
+        }
+        
+        .heading-example h4 {
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+        
+        .heading-example h5 {
+            font-size: 1em;
+            margin: 10px 0;
+        }
+        
+        /* Example 6: Button styles */
+        button, .button {
+            padding: 12px 24px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        
+        .bad-button {
+            background: #ff6b6b;
+            border: none;
+            font-size: 0.8em;
+            padding: 5px 10px;
+        }
+        
+        .good-button {
+            background: #4CAF50;
+            color: white;
+            border: 2px solid #45a049;
+            font-size: 1em;
+            padding: 12px 24px;
+        }
+        
+        .good-button:hover {
+            background: #45a049;
+        }
+        
+        .good-button:focus {
+            outline: 3px solid #2196F3;
+            outline-offset: 2px;
+        }
+        
+        /* Example 7: Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        table th,
+        table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        table th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        /* Skip link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #000;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-container {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <header>
+        <h1>Web Accessibility: Before & After</h1>
+        <p>An Educational Demonstration of Common WCAG Violations and How to Fix Them</p>
+    </header>
+    
+    <div class="container">
+        <div class="intro">
+            <h2>About This Demo</h2>
+            <p>This interactive demonstration shows common web accessibility violations side-by-side with their corrected versions. Each example illustrates issues that prevent people with disabilities from accessing web content and demonstrates best practices for creating inclusive websites that comply with WCAG 2.1 AA standards.</p>
+            <p><strong>Note:</strong> The "Before" examples intentionally contain accessibility violations for educational purposes only.</p>
+        </div>
+        
+        <!-- Example 1: Color Contrast -->
+        <div class="comparison-container">
+            <div class="demo-section before">
+                <h2>BEFORE <span class="badge bad">Non-Compliant</span></h2>
+                
+                <div class="issue-list">
+                    <h3>❌ Accessibility Issues:</h3>
+                    <ul>
+                        <li>Color contrast ratio of 1.8:1 (fails WCAG AA 4.5:1 requirement)</li>
+                        <li>Text is difficult to read for users with low vision</li>
+                        <li>Unusable for people with color blindness</li>
+                    </ul>
+                </div>
+                
+                <div class="example-box low-contrast">
+                    <h3 style="color: #cccccc;">Low Contrast Text Example</h3>
+                    <p>This text has very poor contrast against the background. Users with visual impairments, older users, and anyone in bright sunlight will struggle to read this content. The contrast ratio is approximately 1.8:1, which fails WCAG AA standards that require at least 4.5:1 for normal text.</p>
+                </div>
+            </div>
+            
+            <div class="demo-section after">
+                <h2>AFTER <span class="badge good">Compliant</span></h2>
+                
+                <div class="fix-list">
+                    <h3>✓ Accessibility Fixes:</h3>
+                    <ul>
+                        <li>Color contrast ratio of 16:1 (exceeds WCAG AA requirements)</li>
+                        <li>Text is clearly readable for all users</li>
+                        <li>Accessible to people with various visual impairments</li>
+                    </ul>
+                </div>
+                
+                <div class="example-box good-contrast">
+                    <h3>Good Contrast Text Example</h3>
+                    <p>This text has excellent contrast against the background. Users with visual impairments, older users, and anyone in bright sunlight can easily read this content. The contrast ratio is approximately 16:1, which exceeds WCAG AA standards that require at least 4.5:1 for normal text.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Example 2: Link Text -->
+        <div class="comparison-container">
+            <div class="demo-section before">
+                <h2>BEFORE <span class="badge bad">Non-Compliant</span></h2>
+                
+                <div class="issue-list">
+                    <h3>❌ Accessibility Issues:</h3>
+                    <ul>
+                        <li>Non-descriptive link text ("click here", "read more")</li>
+                        <li>Screen reader users can't understand link purpose</li>
+                        <li>Poor navigation experience when browsing links only</li>
+                    </ul>
+                </div>
+                
+                <div class="link-example">
+                    <p>To learn more about web accessibility, <a href="#">click here</a>.</p>
+                    <p>Our latest article is now available. <a href="#">Read more</a>.</p>
+                    <p>Download the file <a href="#">here</a>.</p>
+                </div>
+            </div>
+            
+            <div class="demo-section after">
+                <h2>AFTER <span class="badge good">Compliant</span></h2>
+                
+                <div class="fix-list">
+                    <h3>✓ Accessibility Fixes:</h3>
+                    <ul>
+                        <li>Descriptive link text that explains destination</li>
+                        <li>Screen readers can understand context independently</li>
+                        <li>Better SEO and user experience for everyone</li>
+                    </ul>
+                </div>
+                
+                <div class="link-example">
+                    <p><a href="#">Learn more about web accessibility standards</a>.</p>
+                    <p><a href="#">Read our latest article on inclusive design principles</a>.</p>
+                    <p><a href="#">Download the accessibility checklist (PDF, 2.5MB)</a>.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Example 3: Form Labels -->
+        <div class="comparison-container">
+            <div class="demo-section before">
+                <h2>BEFORE <span class="badge bad">Non-Compliant</span></h2>
+                
+                <div class="issue-list">
+                    <h3>❌ Accessibility Issues:</h3>
+                    <ul>
+                        <li>No labels associated with form fields</li>
+                        <li>Screen readers can't identify input purpose</li>
+                        <li>Clicking near the field doesn't focus it</li>
+                        <li>No error identification or instructions</li>
+                    </ul>
+                </div>
+                
+                <div class="form-example">
+                    <input type="text" placeholder="Name">
+                    <input type="email" placeholder="Email">
+                    <select>
+                        <option>Select an option</option>
+                        <option>Option 1</option>
+                        <option>Option 2</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="demo-section after">
+                <h2>AFTER <span class="badge good">Compliant</span></h2>
+                
+                <div class="fix-list">
+                    <h3>✓ Accessibility Fixes:</h3>
+                    <ul>
+                        <li>Proper labels associated with inputs using "for" and "id"</li>
+                        <li>Screen readers announce field purpose</li>
+                        <li>Larger clickable area for users with motor impairments</li>
+                        <li>Required fields marked with asterisk and aria-required</li>
+                    </ul>
+                </div>
+                
+                <div class="form-example">
+                    <label for="name-input">Full Name <span style="color: red;">*</span></label>
+                    <input type="text" id="name-input" name="name" required aria-required="true">
+                    
+                    <label for="email-input">Email Address <span style="color: red;">*</span></label>
+                    <input type="email" id="email-input" name="email" required aria-required="true">
+                    
+                    <label for="category-select">Category</label>
+                    <select id="category-select" name="category">
+                        <option value="">Select a category</option>
+                        <option value="1">Design</option>
+                        <option value="2">Development</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Example 4: Images -->
+        <div class="comparison-container">
+            <div class="demo-section before">
+                <h2>BEFORE <span class="badge bad">Non-Compliant</span></h2>
+                
+                <div class="issue-list">
+                    <h3>❌ Accessibility Issues:</h3>
+                    <ul>
+                        <li>Missing alt text on informative image</li>
+                        <li>Screen readers announce "image" with no context</li>
+                        <li>Users who can't see images miss important information</li>
+                    </ul>
+                </div>
+                
+                <div class="image-example">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%234CAF50' width='300' height='200'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='white' text-anchor='middle' dy='.3em'%3EAccessibility Chart%3C/text%3E%3C/svg%3E" width="300">
+                    <p>The chart shows accessibility improvements over time.</p>
+                </div>
+            </div>
+            
+            <div class="demo-section after">
+                <h2>AFTER <span class="badge good">Compliant</span></h2>
+                
+                <div class="fix-list">
+                    <h3>✓ Accessibility Fixes:</h3>
+                    <ul>
+                        <li>Descriptive alt text that conveys image content</li>
+                        <li>Screen readers provide meaningful information</li>
+                        <li>All users get the same information regardless of ability</li>
+                    </ul>
+                </div>
+                
+                <div class="image-example">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%234CAF50' width='300' height='200'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='white' text-anchor='middle' dy='.3em'%3EAccessibility Chart%3C/text%3E%3C/svg%3E" alt="Bar chart showing 45% increase in accessibility compliance from 2020 to 2025" width="300">
+                    <p>The chart shows accessibility improvements over time.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Example 5: Heading Structure -->
+        <div class="comparison-container">
+            <div class="demo-section before">
+                <h2>BEFORE <span class="badge bad">Non-Compliant</span></h2>
+                
+                <div class="issue-list">
+                    <h3>❌ Accessibility Issues:</h3>
+                    <ul>
+                        <li>Skipped heading levels (H2 to H5)</li>
+                        <li>Headings used only for visual styling</li>
+                        <li>Screen reader navigation is confusing</li>
+                        <li>Document structure is unclear</li>
+                    </ul>
+                </div>
+                
+                <div class="heading-example">
+                    <h5>Introduction</h5>
+                    <p>This section introduces the topic.</p>
+                    <h3>Main Content</h3>
+                    <p>Here is the main content of the page.</p>
+                    <h5>Subsection</h5>
+                    <p>This is a subsection under main content.</p>
+                </div>
+            </div>
+            
+            <div class="demo-section after">
+                <h2>AFTER <span class="badge good">Compliant</span></h2>
+                
+                <div class="fix-list">
+                    <h3>✓ Accessibility Fixes:</h3>
+                    <ul>
+                        <li>Logical heading hierarchy (H2 → H3 → H4)</li>
+                        <li>Headings represent content structure</li>
+                        <li>Screen reader users can navigate efficiently</li>
+                        <li>Clear document outline</li>
+                    </ul>
+                </div>
+                
+                <div class="heading-example">
+                    <h3>Introduction</h3>
+                    <p>This section introduces the topic.</p>
+                    <h3>Main Content</h3>
+                    <p>Here is the main content of the page.</p>
+                    <h4>Subsection</h4>
+                    <p>This is a subsection under main content.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Example 6: Keyboard Navigation -->
+        <div class="comparison-container">
+            <div class="demo-section before">
+                <h2>BEFORE <span class="badge bad">Non-Compliant</span></h2>
+                
+                <div class="issue-list">
+                    <h3>❌ Accessibility Issues:</h3>
+                    <ul>
+                        <li>Clickable div instead of button</li>
+                        <li>No keyboard focus indicator</li>
+                        <li>Not accessible via keyboard navigation</li>
+                        <li>Small click target</li>
+                    </ul>
+                </div>
+                
+                <div onclick="alert('Clicked!')" class="bad-button">Submit</div>
+                <p><em>Try pressing Tab to navigate - the "Submit" element above is not keyboard accessible!</em></p>
+            </div>
+            
+            <div class="demo-section after">
+                <h2>AFTER <span class="badge good">Compliant</span></h2>
+                
+                <div class="fix-list">
+                    <h3>✓ Accessibility Fixes:</h3>
+                    <ul>
+                        <li>Semantic button element used</li>
+                        <li>Clear focus indicator visible</li>
+                        <li>Fully keyboard accessible (Tab and Enter)</li>
+                        <li>Large click/touch target (44x44px minimum)</li>
+                    </ul>
+                </div>
+                
+                <button class="good-button" onclick="alert('Submitted!')">Submit</button>
+                <p><em>Press Tab to navigate to the button, then Enter or Space to activate it!</em></p>
+            </div>
+        </div>
+        
+        <!-- Example 7: Data Tables -->
+        <div class="comparison-container">
+            <div class="demo-section before">
+                <h2>BEFORE <span class="badge bad">Non-Compliant</span></h2>
+                
+                <div class="issue-list">
+                    <h3>❌ Accessibility Issues:</h3>
+                    <ul>
+                        <li>No table headers or structure</li>
+                        <li>Screen readers can't distinguish header from data</li>
+                        <li>Relationships between cells unclear</li>
+                    </ul>
+                </div>
+                
+                <table>
+                    <tr>
+                        <td>Name</td>
+                        <td>Email</td>
+                        <td>Status</td>
+                    </tr>
+                    <tr>
+                        <td>John Doe</td>
+                        <td>john@example.com</td>
+                        <td>Active</td>
+                    </tr>
+                    <tr>
+                        <td>Jane Smith</td>
+                        <td>jane@example.com</td>
+                        <td>Pending</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="demo-section after">
+                <h2>AFTER <span class="badge good">Compliant</span></h2>
+                
+                <div class="fix-list">
+                    <h3>✓ Accessibility Fixes:</h3>
+                    <ul>
+                        <li>Proper table headers using &lt;th&gt; elements</li>
+                        <li>Scope attributes define relationships</li>
+                        <li>Screen readers can navigate table structure</li>
+                        <li>Caption provides table context</li>
+                    </ul>
+                </div>
+                
+                <table>
+                    <caption>User Status Report</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>John Doe</td>
+                            <td>john@example.com</td>
+                            <td>Active</td>
+                        </tr>
+                        <tr>
+                            <td>Jane Smith</td>
+                            <td>jane@example.com</td>
+                            <td>Pending</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Summary Section -->
+        <div class="demo-section" style="grid-column: 1 / -1; background: #e8f5e9; border: 3px solid #27ae60;">
+            <h2>Key Takeaways</h2>
+            <h3>Essential WCAG 2.1 AA Requirements:</h3>
+            <ul style="margin-left: 25px; line-height: 2;">
+                <li><strong>Perceivable:</strong> Content must be presented in ways all users can perceive (sufficient contrast, alt text, captions)</li>
+                <li><strong>Operable:</strong> Users must be able to operate the interface (keyboard navigation, sufficient time, no seizure triggers)</li>
+                <li><strong>Understandable:</strong> Information and interface operation must be understandable (clear labels, error identification, consistent navigation)</li>
+                <li><strong>Robust:</strong> Content must work with current and future technologies (valid HTML, ARIA attributes, semantic markup)</li>
+            </ul>
+            
+            <h3 style="margin-top: 25px;">Quick Compliance Checklist:</h3>
+            <ul style="margin-left: 25px; line-height: 2;">
+                <li>✓ Text contrast ratio of at least 4.5:1 for normal text, 3:1 for large text</li>
+                <li>✓ All form inputs have associated labels</li>
+                <li>✓ All images have appropriate alt text (or alt="" for decorative images)</li>
+                <li>✓ Logical heading structure without skipping levels</li>
+                <li>✓ All functionality available via keyboard</li>
+                <li>✓ Clear focus indicators on interactive elements</li>
+                <li>✓ Descriptive link text (not "click here")</li>
+                <li>✓ Data tables use proper markup with headers</li>
+                <li>✓ Touch targets at least 44x44 pixels</li>
+                <li>✓ No content flashes more than 3 times per second</li>
+            </ul>
+            
+            <p style="margin-top: 25px;"><strong>Resources:</strong> <a href="https://www.w3.org/WAI/WCAG21/quickref/">WCAG 2.1 Quick Reference</a> | <a href="https://wave.webaim.org/">WAVE Evaluation Tool</a> | <a href="https://www.w3.org/WAI/test-evaluate/">Testing Tools</a></p>
+        </div>
+    </div>
+    
+    <footer style="text-align: center; padding: 40px 20px; background: #2c3e50; color: white; margin-top: 40px;">
+        <p>Educational Demo Created for Teaching Web Accessibility</p>
+        <p style="margin-top: 10px; opacity: 0.8;">Remember: Accessibility benefits everyone, not just users with disabilities!</p>
+    </footer>
+</body>
+</html>
