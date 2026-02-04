@@ -600,7 +600,23 @@
     <script>
         // VoiceOver Simulator Logic
         let currentIndex = -1;
-        const demoElements = document.querySelectorAll('.demo-element');
+        let demoElements;
+        
+        // Wait for DOM to load
+        document.addEventListener('DOMContentLoaded', function() {
+            demoElements = document.querySelectorAll('.demo-element');
+            
+            // Add click handlers to demo elements
+            demoElements.forEach((element, index) => {
+                element.addEventListener('click', () => speakElement(element, index));
+                element.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        speakElement(element, index);
+                    }
+                });
+            });
+        });
         
         function openModal(type) {
             const modalId = type + '-modal';
@@ -658,17 +674,6 @@
             currentIndex = -1;
             document.getElementById('vo-output').textContent = 'Click on any element above or use the navigation buttons to begin...';
         }
-        
-        // Add click handlers to demo elements
-        demoElements.forEach((element, index) => {
-            element.addEventListener('click', () => speakElement(element, index));
-            element.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    speakElement(element, index);
-                }
-            });
-        });
         
         // Color Contrast Checker Logic
         function hexToRgb(hex) {
