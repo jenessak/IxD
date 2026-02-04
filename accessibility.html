@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Accessibility Testing Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .tool-card h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        
+        .tool-card p {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+        }
+        
+        .tool-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .launch-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .launch-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .launch-btn:focus {
+            outline: 3px solid #2196F3;
+            outline-offset: 3px;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            background: #c0392b;
+            transform: rotate(90deg);
+        }
+        
+        /* VoiceOver Simulator Styles */
+        .voiceover-demo {
+            margin-top: 30px;
+        }
+        
+        .demo-website {
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            background: #f9f9f9;
+            margin-bottom: 30px;
+        }
+        
+        .demo-website h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .demo-element {
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-element:hover {
+            background: #f0f0f0;
+        }
+        
+        .demo-element.vo-focus {
+            border-color: #2196F3;
+            background: #e3f2fd;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.3);
+        }
+        
+        .voiceover-output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+            min-height: 150px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+        
+        .voiceover-output h4 {
+            color: #3498db;
+            margin-bottom: 15px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .vo-text {
+            background: #34495e;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background: #2980b9;
+        }
+        
+        .control-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        /* Color Contrast Checker Styles */
+        .contrast-checker {
+            margin-top: 30px;
+        }
+        
+        .color-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .color-input-group {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 10px;
+        }
+        
+        .color-input-group h4 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .color-picker-wrapper {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        .color-picker {
+            width: 80px;
+            height: 80px;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .color-value {
+            flex: 1;
+        }
+        
+        .color-value input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .preview-section {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .preview-box {
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            border: 3px solid #ddd;
+        }
+        
+        .preview-box h3 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        
+        .preview-box p {
+            font-size: 1.2em;
+            line-height: 1.8;
+        }
+        
+        .results-section {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        
+        .result-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 5px solid #ddd;
+        }
+        
+        .result-card.pass {
+            border-left-color: #27ae60;
+            background: #d4edda;
+        }
+        
+        .result-card.fail {
+            border-left-color: #e74c3c;
+            background: #f8d7da;
+        }
+        
+        .result-card h4 {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-icon {
+            font-size: 1.5em;
+        }
+        
+        .contrast-ratio {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        .preset-colors {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .preset-btn {
+            padding: 8px 15px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .preset-btn:hover {
+            border-color: #667eea;
+            background: #f0f0f0;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .color-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 Accessibility Testing Tools</h1>
+            <p>Interactive Demos for Understanding Web Accessibility</p>
+        </header>
+        
+        <div class="tools-grid">
+            <div class="tool-card" onclick="openModal('voiceover')">
+                <div class="tool-icon">🎙️</div>
+                <h2>VoiceOver Simulator</h2>
+                <p>Experience how screen readers navigate web content</p>
+                <button class="launch-btn">Launch Simulator</button>
+            </div>
+            
+            <div class="tool-card" onclick="openModal('contrast')">
+                <div class="tool-icon">🎨</div>
+                <h2>Color Contrast Checker</h2>
+                <p>Test color combinations against WCAG standards</p>
+                <button class="launch-btn">Launch Checker</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- VoiceOver Simulator Modal -->
+    <div id="voiceover-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('voiceover')" aria-label="Close VoiceOver Simulator">&times;</button>
+            <h2>🎙️ VoiceOver Simulator</h2>
+            <p>Click on any element below to hear what a screen reader would announce. Use the navigation buttons to simulate keyboard navigation.</p>
+            
+            <div class="voiceover-demo">
+                <div class="demo-website">
+                    <h3>Sample Web Page</h3>
+                    
+                    <div class="demo-element" data-vo="Heading level 1, Welcome to Our Website" tabindex="0">
+                        <h1 style="margin: 0;">Welcome to Our Website</h1>
+                    </div>
+                    
+                    <div class="demo-element" data-vo="Paragraph, This is an example of a standard paragraph with some informational text" tabindex="0">
+                        <p>This is an example of a standard paragraph with some informational text.</p>
+                    </div>
+                    
+                    <div class="demo-element" data-vo="Link, Learn more about accessibility, clickable" tabindex="0">
+                        <a href="#">Learn more about accessibility</a>
+                    </div>
+                    
+                    <div class="demo-element" data-vo="Button, Submit Form, clickable" tabindex="0">
+                        <button style="padding: 10px 20px; font-size: 1em;">Submit Form</button>
+                    </div>
+                    
+                    <div class="demo-element" data-vo="Image, A beautiful sunset over the ocean with orange and pink clouds" tabindex="0">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='150'%3E%3Crect fill='%23ff6b6b' width='200' height='150'/%3E%3Ctext x='50%25' y='50%25' font-size='16' fill='white' text-anchor='middle' dy='.3em'%3ESunset Image%3C/text%3E%3C/svg%3E" alt="A beautiful sunset over the ocean with orange and pink clouds" style="max-width: 200px;">
+                    </div>
+                    
+                    <div class="demo-element" data-vo="Text field, Email Address, edit text, required" tabindex="0">
+                        <label for="demo-email">Email Address *</label><br>
+                        <input type="email" id="demo-email" required style="padding: 8px; width: 100%; max-width: 300px; margin-top: 5px;">
+                    </div>
+                    
+                    <div class="demo-element" data-vo="List with 3 items" tabindex="0">
+                        <ul>
+                            <li>First list item</li>
+                            <li>Second list item</li>
+                            <li>Third list item</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="demo-element" data-vo="Heading level 2, Additional Information" tabindex="0">
+                        <h2 style="margin: 0;">Additional Information</h2>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button class="control-btn" onclick="previousElement()">⬆️ Previous Element</button>
+                    <button class="control-btn" onclick="nextElement()">⬇️ Next Element</button>
+                    <button class="control-btn" onclick="speakCurrent()">🔊 Repeat Current</button>
+                    <button class="control-btn" onclick="resetVoiceOver()">🔄 Reset</button>
+                </div>
+                
+                <div class="voiceover-output">
+                    <h4>🎙️ VoiceOver Output:</h4>
+                    <div id="vo-output" class="vo-text">
+                        Click on any element above or use the navigation buttons to begin...
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <h4 style="color: #856404; margin-bottom: 10px;">💡 Understanding Screen Reader Output</h4>
+                    <ul style="margin-left: 20px; color: #856404;">
+                        <li>Screen readers announce element type (heading, link, button, etc.)</li>
+                        <li>They specify the heading level (H1, H2, etc.) for proper document structure</li>
+                        <li>Interactive elements are identified as "clickable"</li>
+                        <li>Form fields announce their type (text field, checkbox, etc.) and whether they're required</li>
+                        <li>Images announce their alt text - this is why descriptive alt text is crucial!</li>
+                        <li>Lists announce the number of items they contain</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Color Contrast Checker Modal -->
+    <div id="contrast-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('contrast')" aria-label="Close Contrast Checker">&times;</button>
+            <h2>🎨 Color Contrast Checker</h2>
+            <p>Test color combinations to ensure they meet WCAG 2.1 accessibility standards.</p>
+            
+            <div class="contrast-checker">
+                <div class="color-inputs">
+                    <div class="color-input-group">
+                        <h4>Text Color (Foreground)</h4>
+                        <div class="color-picker-wrapper">
+                            <input type="color" id="text-color" class="color-picker" value="#000000" onchange="updateContrast()">
+                            <div class="color-value">
+                                <input type="text" id="text-color-hex" value="#000000" oninput="updateFromHex('text')" placeholder="#000000">
+                            </div>
+                        </div>
+                        <div class="preset-colors">
+                            <button class="preset-btn" onclick="setPreset('text', '#000000')">Black</button>
+                            <button class="preset-btn" onclick="setPreset('text', '#333333')">Dark Gray</button>
+                            <button class="preset-btn" onclick="setPreset('text', '#666666')">Gray</button>
+                            <button class="preset-btn" onclick="setPreset('text', '#FFFFFF')">White</button>
+                        </div>
+                    </div>
+                    
+                    <div class="color-input-group">
+                        <h4>Background Color</h4>
+                        <div class="color-picker-wrapper">
+                            <input type="color" id="bg-color" class="color-picker" value="#FFFFFF" onchange="updateContrast()">
+                            <div class="color-value">
+                                <input type="text" id="bg-color-hex" value="#FFFFFF" oninput="updateFromHex('bg')" placeholder="#FFFFFF">
+                            </div>
+                        </div>
+                        <div class="preset-colors">
+                            <button class="preset-btn" onclick="setPreset('bg', '#FFFFFF')">White</button>
+                            <button class="preset-btn" onclick="setPreset('bg', '#F0F0F0')">Light Gray</button>
+                            <button class="preset-btn" onclick="setPreset('bg', '#007BFF')">Blue</button>
+                            <button class="preset-btn" onclick="setPreset('bg', '#000000')">Black</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>Preview</h3>
+                    <div class="preview-box" id="preview-box">
+                        <h3>Sample Heading Text</h3>
+                        <p>This is regular body text. It should be easy to read with sufficient contrast between the text and background colors. WCAG requires a minimum contrast ratio of 4.5:1 for normal text and 3:1 for large text (18pt+ or 14pt+ bold).</p>
+                    </div>
+                </div>
+                
+                <div class="results-section">
+                    <h3>Contrast Results</h3>
+                    <div class="contrast-ratio" id="contrast-ratio">21:1</div>
+                    
+                    <div class="result-card pass" id="result-normal">
+                        <h4><span class="result-icon">✅</span> Normal Text (WCAG AA)</h4>
+                        <p>Requires 4.5:1 contrast ratio</p>
+                    </div>
+                    
+                    <div class="result-card pass" id="result-large">
+                        <h4><span class="result-icon">✅</span> Large Text (WCAG AA)</h4>
+                        <p>Requires 3:1 contrast ratio (18pt+ or 14pt+ bold)</p>
+                    </div>
+                    
+                    <div class="result-card pass" id="result-aaa-normal">
+                        <h4><span class="result-icon">✅</span> Normal Text (WCAG AAA)</h4>
+                        <p>Enhanced - Requires 7:1 contrast ratio</p>
+                    </div>
+                    
+                    <div class="result-card pass" id="result-aaa-large">
+                        <h4><span class="result-icon">✅</span> Large Text (WCAG AAA)</h4>
+                        <p>Enhanced - Requires 4.5:1 contrast ratio</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                    <h4 style="color: #155724; margin-bottom: 10px;">📚 Understanding Contrast Requirements</h4>
+                    <ul style="margin-left: 20px; color: #155724; line-height: 1.8;">
+                        <li><strong>WCAG AA (Standard):</strong> Minimum legal requirement for most websites</li>
+                        <li><strong>WCAG AAA (Enhanced):</strong> Higher standard for maximum accessibility</li>
+                        <li><strong>Normal Text:</strong> Text smaller than 18pt (or 14pt bold)</li>
+                        <li><strong>Large Text:</strong> Text 18pt and larger (or 14pt+ bold)</li>
+                        <li><strong>Why it matters:</strong> Users with low vision, color blindness, or viewing in bright sunlight need sufficient contrast to read content</li>
+                    </ul>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 20px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196F3;">
+                    <h4 style="color: #0d47a1; margin-bottom: 10px;">🎯 Quick Test Scenarios</h4>
+                    <button class="control-btn" onclick="loadScenario('pass')" style="margin: 5px;">Good Example</button>
+                    <button class="control-btn" onclick="loadScenario('fail')" style="margin: 5px; background: #e74c3c;">Poor Example</button>
+                    <button class="control-btn" onclick="loadScenario('borderline')" style="margin: 5px; background: #f39c12;">Borderline Example</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // VoiceOver Simulator Logic
+        let currentIndex = -1;
+        const demoElements = document.querySelectorAll('.demo-element');
+        
+        function openModal(type) {
+            const modalId = type + '-modal';
+            document.getElementById(modalId).classList.add('active');
+            if (type === 'contrast') {
+                updateContrast();
+            }
+        }
+        
+        function closeModal(type) {
+            const modalId = type + '-modal';
+            document.getElementById(modalId).classList.remove('active');
+            if (type === 'voiceover') {
+                resetVoiceOver();
+            }
+        }
+        
+        function speakElement(element, index) {
+            const voText = element.getAttribute('data-vo');
+            const output = document.getElementById('vo-output');
+            output.textContent = voText;
+            
+            // Remove focus from all elements
+            demoElements.forEach(el => el.classList.remove('vo-focus'));
+            
+            // Add focus to current element
+            element.classList.add('vo-focus');
+            currentIndex = index;
+            
+            // Scroll element into view
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        function nextElement() {
+            if (currentIndex < demoElements.length - 1) {
+                speakElement(demoElements[currentIndex + 1], currentIndex + 1);
+            }
+        }
+        
+        function previousElement() {
+            if (currentIndex > 0) {
+                speakElement(demoElements[currentIndex - 1], currentIndex - 1);
+            }
+        }
+        
+        function speakCurrent() {
+            if (currentIndex >= 0 && currentIndex < demoElements.length) {
+                const voText = demoElements[currentIndex].getAttribute('data-vo');
+                document.getElementById('vo-output').textContent = voText;
+            }
+        }
+        
+        function resetVoiceOver() {
+            demoElements.forEach(el => el.classList.remove('vo-focus'));
+            currentIndex = -1;
+            document.getElementById('vo-output').textContent = 'Click on any element above or use the navigation buttons to begin...';
+        }
+        
+        // Add click handlers to demo elements
+        demoElements.forEach((element, index) => {
+            element.addEventListener('click', () => speakElement(element, index));
+            element.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    speakElement(element, index);
+                }
+            });
+        });
+        
+        // Color Contrast Checker Logic
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+        
+        function getLuminance(r, g, b) {
+            const a = [r, g, b].map(v => {
+                v /= 255;
+                return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+            });
+            return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+        }
+        
+        function getContrastRatio(color1, color2) {
+            const rgb1 = hexToRgb(color1);
+            const rgb2 = hexToRgb(color2);
+            
+            if (!rgb1 || !rgb2) return 1;
+            
+            const lum1 = getLuminance(rgb1.r, rgb1.g, rgb1.b);
+            const lum2 = getLuminance(rgb2.r, rgb2.g, rgb2.b);
+            
+            const brightest = Math.max(lum1, lum2);
+            const darkest = Math.min(lum1, lum2);
+            
+            return (brightest + 0.05) / (darkest + 0.05);
+        }
+        
+        function updateContrast() {
+            const textColor = document.getElementById('text-color').value;
+            const bgColor = document.getElementById('bg-color').value;
+            
+            document.getElementById('text-color-hex').value = textColor.toUpperCase();
+            document.getElementById('bg-color-hex').value = bgColor.toUpperCase();
+            
+            const previewBox = document.getElementById('preview-box');
+            previewBox.style.color = textColor;
+            previewBox.style.backgroundColor = bgColor;
+            
+            const ratio = getContrastRatio(textColor, bgColor);
+            document.getElementById('contrast-ratio').textContent = ratio.toFixed(2) + ':1';
+            
+            // Update result cards
+            updateResultCard('result-normal', ratio >= 4.5);
+            updateResultCard('result-large', ratio >= 3);
+            updateResultCard('result-aaa-normal', ratio >= 7);
+            updateResultCard('result-aaa-large', ratio >= 4.5);
+        }
+        
+        function updateResultCard(id, pass) {
+            const card = document.getElementById(id);
+            const icon = card.querySelector('.result-icon');
+            
+            if (pass) {
+                card.className = 'result-card pass';
+                icon.textContent = '✅';
+            } else {
+                card.className = 'result-card fail';
+                icon.textContent = '❌';
+            }
+        }
+        
+        function updateFromHex(type) {
+            const input = document.getElementById(type + '-color-hex');
+            let hex = input.value.trim();
+            
+            if (!hex.startsWith('#')) {
+                hex = '#' + hex;
+            }
+            
+            if (/^#[0-9A-F]{6}$/i.test(hex)) {
+                document.getElementById(type + '-color').value = hex;
+                updateContrast();
+            }
+        }
+        
+        function setPreset(type, color) {
+            document.getElementById(type + '-color').value = color;
+            document.getElementById(type + '-color-hex').value = color.toUpperCase();
+            updateContrast();
+        }
+        
+        function loadScenario(scenario) {
+            switch(scenario) {
+                case 'pass':
+                    setPreset('text', '#212529');
+                    setPreset('bg', '#FFFFFF');
+                    break;
+                case 'fail':
+                    setPreset('text', '#CCCCCC');
+                    setPreset('bg', '#FFFFFF');
+                    break;
+                case 'borderline':
+                    setPreset('text', '#767676');
+                    setPreset('bg', '#FFFFFF');
+                    break;
+            }
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            const voModal = document.getElementById('voiceover-modal');
+            if (voModal.classList.contains('active')) {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    nextElement();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    previousElement();
+                } else if (e.key === 'Escape') {
+                    closeModal('voiceover');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
