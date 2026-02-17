@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI Patterns — Component Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0d0d0d;
+  --paper: #f5f3ee;
+  --cream: #ede9e0;
+  --accent: #e8441a;
+  --accent2: #2c6bed;
+  --green: #1a9b5f;
+  --muted: #888;
+  --border: #d4cfc4;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 3rem 4rem 2rem;
+  border-bottom: 2px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+}
+
+.header-title h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.header-title h1 em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.header-meta {
+  text-align: right;
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  line-height: 1.8;
+}
+
+/* ── NAV TABS ── */
+.nav-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--ink);
+  padding: 0 4rem;
+  overflow-x: auto;
+}
+
+.nav-tab {
+  padding: 1rem 1.5rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--muted);
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.nav-tab:hover { color: var(--ink); }
+.nav-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+/* ── MAIN ── */
+main { padding: 0 4rem 4rem; }
+
+.section { display: none; padding-top: 3rem; }
+.section.active { display: block; }
+
+.section-intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-heading {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.section-desc {
+  max-width: 380px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* ── VARIANT GRID ── */
+.variant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5px;
+  border: 1.5px solid var(--ink);
+  background: var(--ink);
+}
+
+.variant-cell {
+  background: var(--paper);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: fadeUp 0.4s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.variant-cell:nth-child(1) { animation-delay: 0.05s; }
+.variant-cell:nth-child(2) { animation-delay: 0.10s; }
+.variant-cell:nth-child(3) { animation-delay: 0.15s; }
+.variant-cell:nth-child(4) { animation-delay: 0.20s; }
+.variant-cell:nth-child(5) { animation-delay: 0.25s; }
+.variant-cell:nth-child(6) { animation-delay: 0.30s; }
+
+.variant-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.variant-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.variant-desc {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.demo-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  padding: 1.5rem;
+  background: var(--cream);
+  border-radius: 4px;
+}
+
+/* ═══════════════════════════════════
+   LIKE BUTTONS
+═══════════════════════════════════ */
+
+/* 1. Classic */
+.like-classic {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  border: 2px solid #ddd;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px; font-weight: 600; color: #555;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.18s;
+  user-select: none;
+}
+.like-classic:hover { border-color: #f87171; color: #ef4444; }
+.like-classic.on { border-color: #ef4444; background: #fef2f2; color: #ef4444; }
+.like-classic .hico { transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
+.like-classic.on .hico { transform: scale(1.3); }
+
+/* 2. Ghost / minimal */
+.like-ghost {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  border: none; background: none;
+  cursor: pointer; font-size: 13px; color: #aaa;
+  font-family: 'DM Sans', sans-serif;
+  transition: color 0.15s;
+  user-select: none;
+}
+.like-ghost:hover { color: #e11d48; }
+.like-ghost.on { color: #e11d48; }
+.like-ghost .hico { transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
+.like-ghost.on .hico { transform: scale(1.25); }
+
+/* 3. Filled / solid */
+.like-solid {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background: #f3f4f6;
+  cursor: pointer; font-size: 14px; font-weight: 600;
+  color: #374151; font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s, color 0.15s;
+  user-select: none;
+}
+.like-solid:hover { background: #fce7f3; color: #be185d; }
+.like-solid.on { background: #fce7f3; color: #be185d; }
+.like-solid .hico { transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
+.like-solid.on .hico { transform: scale(1.3); }
+
+/* 4. With count badge */
+.like-badge-wrap { display: flex; align-items: center; gap: 0.75rem; }
+.like-badge {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.18s;
+  user-select: none;
+}
+.like-badge:hover { border-color: #f87171; background: #fef2f2; }
+.like-badge.on { border-color: #ef4444; background: #fef2f2; }
+.like-badge .hico { transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
+.like-badge.on .hico { transform: scale(1.3); }
+.badge-count { font-size: 22px; font-weight: 700; font-family: 'Syne', sans-serif; }
+.badge-label { font-size: 11px; color: var(--muted); }
+
+/* 5. Dark theme */
+.like-dark-wrap { background: #111; padding: 1rem; border-radius: 8px; display: flex; align-items: center; gap: 1rem; }
+.like-dark {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1.5px solid #333;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer; font-size: 13px; font-weight: 500;
+  color: #888; font-family: 'DM Sans', sans-serif;
+  transition: all 0.18s;
+  user-select: none;
+}
+.like-dark:hover { border-color: #f87171; color: #f87171; }
+.like-dark.on { border-color: #ef4444; color: #ef4444; }
+.like-dark .hico { transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
+.like-dark.on .hico { transform: scale(1.3); }
+.like-dark-count { font-size: 13px; color: #555; }
+
+/* 6. Animated burst */
+.like-burst-wrap { position: relative; display: inline-flex; align-items: center; gap: 0.6rem; }
+.like-burst {
+  position: relative;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; overflow: visible;
+  user-select: none; transition: border-color 0.15s, background 0.15s;
+}
+.like-burst:hover { border-color: #fca5a5; }
+.like-burst.on { border-color: #ef4444; background: #fef2f2; }
+.burst-ring {
+  position: absolute;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: 2px solid #ef4444;
+  opacity: 0;
+  pointer-events: none;
+}
+.like-burst.on .burst-ring {
+  animation: burstOut 0.5s ease-out forwards;
+}
+@keyframes burstOut {
+  from { transform: scale(1); opacity: 0.8; }
+  to   { transform: scale(2); opacity: 0; }
+}
+.like-burst .hico { transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
+.like-burst.on .hico { transform: scale(1.3); }
+.burst-label { font-size: 13px; color: #888; }
+
+/* ═══════════════════════════════════
+   TOGGLE SWITCHES
+═══════════════════════════════════ */
+.tog { position: relative; display: inline-block; cursor: pointer; user-select: none; }
+.tog input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+/* 1. Classic */
+.tog-classic { width: 52px; height: 30px; }
+.tog-classic .track {
+  position: absolute; inset: 0;
+  background: #e5e7eb; border-radius: 999px;
+  transition: background 0.2s;
+}
+.tog-classic input:checked ~ .track { background: var(--accent2); }
+.tog-classic .knob {
+  position: absolute; top: 4px; left: 4px;
+  width: 22px; height: 22px;
+  background: #fff; border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0,0,0,.2);
+  transition: transform 0.22s cubic-bezier(0.34,1.4,0.64,1);
+}
+.tog-classic input:checked ~ .track .knob { transform: translateX(22px); }
+
+/* 2. Pill with icon */
+.tog-icon { width: 60px; height: 32px; }
+.tog-icon .track {
+  position: absolute; inset: 0;
+  background: #e5e7eb; border-radius: 999px;
+  transition: background 0.2s;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 6px;
+  font-size: 11px;
+}
+.tog-icon input:checked ~ .track { background: var(--green); }
+.tog-icon .track .ico-off { color: #aaa; }
+.tog-icon .track .ico-on  { color: rgba(255,255,255,0); transition: color 0.2s; }
+.tog-icon input:checked ~ .track .ico-on  { color: #fff; }
+.tog-icon input:checked ~ .track .ico-off { color: rgba(255,255,255,0); }
+.tog-icon .knob {
+  position: absolute; top: 4px; left: 4px;
+  width: 24px; height: 24px;
+  background: #fff; border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0,0,0,.2);
+  transition: transform 0.22s cubic-bezier(0.34,1.4,0.64,1);
+}
+.tog-icon input:checked ~ .track .knob { transform: translateX(28px); }
+
+/* 3. Square */
+.tog-square { width: 56px; height: 28px; }
+.tog-square .track {
+  position: absolute; inset: 0;
+  background: #e5e7eb; border-radius: 4px;
+  transition: background 0.2s;
+}
+.tog-square input:checked ~ .track { background: var(--ink); }
+.tog-square .knob {
+  position: absolute; top: 4px; left: 4px;
+  width: 20px; height: 20px;
+  background: #fff; border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  transition: transform 0.2s cubic-bezier(0.34,1.4,0.64,1);
+}
+.tog-square input:checked ~ .track .knob { transform: translateX(28px); }
+
+/* 4. Bordered outline */
+.tog-outline { width: 52px; height: 30px; }
+.tog-outline .track {
+  position: absolute; inset: 0;
+  background: transparent; border-radius: 999px;
+  border: 2px solid #ccc;
+  transition: border-color 0.2s;
+}
+.tog-outline input:checked ~ .track { border-color: var(--accent); }
+.tog-outline .knob {
+  position: absolute; top: 5px; left: 5px;
+  width: 16px; height: 16px;
+  background: #ccc; border-radius: 50%;
+  transition: transform 0.22s cubic-bezier(0.34,1.4,0.64,1), background 0.2s;
+}
+.tog-outline input:checked ~ .track .knob { transform: translateX(22px); background: var(--accent); }
+
+/* 5. Large / jumbo */
+.tog-large { width: 80px; height: 44px; }
+.tog-large .track {
+  position: absolute; inset: 0;
+  background: #e5e7eb; border-radius: 999px;
+  transition: background 0.2s;
+}
+.tog-large input:checked ~ .track { background: #7c3aed; }
+.tog-large .knob {
+  position: absolute; top: 6px; left: 6px;
+  width: 32px; height: 32px;
+  background: #fff; border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  transition: transform 0.22s cubic-bezier(0.34,1.4,0.64,1);
+}
+.tog-large input:checked ~ .track .knob { transform: translateX(36px); }
+
+/* 6. With label */
+.tog-labeled-wrap { display: flex; align-items: center; gap: 0.75rem; }
+.tog-labeled-text { font-size: 14px; font-weight: 500; min-width: 28px; transition: color 0.2s; }
+.tog-labeled { width: 48px; height: 26px; }
+.tog-labeled .track {
+  position: absolute; inset: 0;
+  background: #e5e7eb; border-radius: 999px;
+  transition: background 0.2s;
+}
+.tog-labeled input:checked ~ .track { background: var(--green); }
+.tog-labeled .knob {
+  position: absolute; top: 3px; left: 3px;
+  width: 20px; height: 20px;
+  background: #fff; border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  transition: transform 0.22s cubic-bezier(0.34,1.4,0.64,1);
+}
+.tog-labeled input:checked ~ .track .knob { transform: translateX(22px); }
+
+/* ═══════════════════════════════════
+   FORM ERRORS
+═══════════════════════════════════ */
+.f-group { display: flex; flex-direction: column; gap: 0.35rem; width: 100%; }
+.f-label { font-size: 12px; font-weight: 600; color: #374151; }
+.f-input {
+  width: 100%; padding: 0.6rem 0.8rem;
+  border: 1.5px solid #e5e7eb; border-radius: 8px;
+  font-size: 14px; font-family: 'DM Sans', sans-serif;
+  color: #111; background: #fff; outline: none;
+}
+.f-input:focus { border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(44,107,237,.12); }
+
+/* 1. Inline message */
+.f-input.err1 { border-color: #ef4444; background: #fff5f5; }
+.f-msg { font-size: 12px; color: #ef4444; display: flex; align-items: center; gap: 4px; }
+
+/* 2. Tooltip style */
+.f-tooltip-wrap { position: relative; width: 100%; }
+.f-input.err2 { border-color: #ef4444; }
+.f-tooltip {
+  position: absolute;
+  top: calc(100% + 8px); left: 0;
+  background: #ef4444; color: #fff;
+  font-size: 11.5px; padding: 0.35rem 0.65rem;
+  border-radius: 6px; white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(239,68,68,.3);
+}
+.f-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -5px; left: 14px;
+  border: 5px solid transparent;
+  border-bottom: 5px solid #ef4444;
+  border-top: none;
+}
+
+/* 3. Icon right */
+.f-icon-wrap { position: relative; width: 100%; }
+.f-input.err3 { border-color: #ef4444; padding-right: 2.5rem; }
+.f-icon-right {
+  position: absolute; right: 0.7rem; top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.f-msg-sm { font-size: 11.5px; color: #ef4444; }
+
+/* 4. Shake animation */
+.f-input.err4 { border-color: #ef4444; animation: shake 0.4s ease; }
+@keyframes shake {
+  0%,100%{ transform: translateX(0); }
+  20%    { transform: translateX(-6px); }
+  40%    { transform: translateX(6px); }
+  60%    { transform: translateX(-4px); }
+  80%    { transform: translateX(4px); }
+}
+
+/* 5. Banner / alert style */
+.f-banner {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  border-radius: 8px;
+  display: flex; align-items: flex-start; gap: 0.6rem;
+}
+.f-banner-icon { flex-shrink: 0; margin-top: 1px; }
+.f-banner-text { font-size: 13px; color: #991b1b; line-height: 1.5; }
+.f-banner-title { font-weight: 600; }
+.f-input.err5 { border-color: #ef4444; }
+
+/* 6. Success + error side by side */
+.f-input.succ { border-color: #22c55e; background: #f0fdf4; }
+.f-msg-g { font-size: 12px; color: #16a34a; display: flex; align-items: center; gap: 4px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  header { flex-direction: column; align-items: flex-start; padding: 2rem; }
+  .nav-bar, main { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .header-meta { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-title">
+    <h1>UI<br>Pattern<br><em>Types</em></h1>
+  </div>
+  <div class="header-meta">
+    3 Components<br>
+    6 Variants each<br>
+    IxD Reference
+  </div>
+</header>
+
+<nav class="nav-bar">
+  <button class="nav-tab active" onclick="showSection('like')">❤ Like Button</button>
+  <button class="nav-tab" onclick="showSection('toggle')">⟳ Toggle Switch</button>
+  <button class="nav-tab" onclick="showSection('error')">⚠ Form Error</button>
+</nav>
+
+<main>
+
+  <!-- ══════ LIKE BUTTONS ══════ -->
+  <div id="sec-like" class="section active">
+    <div class="section-intro">
+      <div>
+        <div class="section-heading">Like Button</div>
+      </div>
+      <p class="section-desc">A like button gives users a way to express positive feedback. The key interaction is the toggle — liked / not liked — often with a count and a micro-animation to signal the state change.</p>
+    </div>
+
+    <div class="variant-grid">
+
+      <!-- 1 -->
+      <div class="variant-cell">
+        <div class="variant-label">Variant 01</div>
+        <div class="variant-name">Pill Outline</div>
+        <div class="demo-area">
+          <button class="like-classic" id="lc1" onclick="toggleLike('lc1','lcc1',142)">
+            <svg class="hico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span id="lcc1">142</span>
+          </button>
+        </div>
+        <div class="variant-desc">Bordered pill shape with heart icon and live count. Clear state difference between liked and default via fill + color change.</div>
+      </div>
+
+      <!-- 2 -->
+      <div class="variant-cell">
+        <div class="variant-label">Variant 02</div>
+        <div class="variant-name">Ghost / Text</div>
+        <div class="demo-area">
+          <button class="like-ghost" id="lc2" onclick="toggleLike('lc2','lcc2',28)">
+            <svg class="hico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span id="lcc2">28 likes</span>
+          </button>
+        </div>
+        <div class="variant-desc">No border, no background. Minimal footprint — common in comment threads and social feeds where space is tight.</div>
+      </div>
+
+      <!-- 3 -->
+      <div class="variant-cell">
+        <div class="variant-label">Variant 03</div>
+        <div class="variant-name">Filled Background</div>
+        <div class="demo-area">
+          <button class="like-solid" id="lc3" onclick="toggleLike('lc3','lcc3',55)">
+            <svg class="hico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span id="lcc3">55</span>
+          </button>
+        </div>
+        <div class="variant-desc">Solid background that shifts color on activation. Feels tactile and substantial — good for card-based layouts.</div>
+      </div>
+
+      <!-- 4 -->
+      <div class="variant-cell">
+        <div class="variant-label">Variant 04</div>
+        <div class="variant-name">Icon + Count Separated</div>
+        <div class="demo-area">
+          <div class="like-badge-wrap">
+            <button class="like-badge" id="lc4" onclick="toggleLike('lc4','lcc4',null)">
+              <svg class="hico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div>
+              <div class="badge-count" id="lcc4">1.2k</div>
+              <div class="badge-label">likes</div>
+            </div>
+          </div>
+        </div>
+        <div class="variant-desc">Icon and count live separately. Emphasizes the number — good for content with large engagement metrics.</div>
+      </div>
+
+      <!-- 5 -->
+      <div class="variant-cell">
+        <div class="variant-label">Variant 05</div>
+        <div class="variant-name">Dark Theme</div>
+        <div class="demo-area" style="padding:0; background:#111; border-radius:4px;">
+          <div class="like-dark-wrap">
+            <button class="like-dark" id="lc5" onclick="toggleLike('lc5','lcc5',312)">
+              <svg class="hico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              <span id="lcc5">312</span>
+            </button>
+            <span class="like-dark-count">reactions</span>
+          </div>
+        </div>
+        <div class="variant-desc">Same pill pattern adapted for dark UI. Border switches from dark-gray to red on interaction. Color usage is minimal.</div>
+      </div>
+
+      <!-- 6 -->
+      <div class="variant-cell">
+        <div class="variant-label">Variant 06</div>
+        <div class="variant-name">Burst / Ripple</div>
+        <div class="demo-area">
+          <div class="like-burst-wrap">
+            <button class="like-burst" id="lc6" onclick="toggleLike('lc6','lcc6b',null)">
+              <span class="burst-ring" id="br6"></span>
+              <svg class="hico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <span class="burst-label" id="lcc6b">Click me!</span>
+          </div>
+        </div>
+        <div class="variant-desc">Adds a circular ripple that expands outward on activation. Makes the interaction feel more rewarding and physical.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════ TOGGLE SWITCHES ══════ -->
+  <div id="sec-toggle" class="section">
+    <div class="section-intro">
+      <div>
+        <div class="section-heading">Toggle Switch</div>
+      </div>
+      <p class="section-desc">Toggles represent an immediate binary setting — on or off. Unlike a checkbox, they imply instant effect without a save action. Key design factors: track, knob, color, and motion.</p>
+    </div>
+
+    <div class="variant-grid">
+
+      <div class="variant-cell">
+        <div class="variant-label">Variant 01</div>
+        <div class="variant-name">Classic Round</div>
+        <div class="demo-area">
+          <label class="tog tog-classic">
+            <input type="checkbox">
+            <span class="track"><span class="knob"></span></span>
+          </label>
+        </div>
+        <div class="variant-desc">The standard toggle: rounded track, circular knob, blue when on. Recognizable and platform-safe. Used by iOS, Android, and most design systems.</div>
+      </div>
+
+      <div class="variant-cell">
+        <div class="variant-label">Variant 02</div>
+        <div class="variant-name">Icon Indicator</div>
+        <div class="demo-area">
+          <label class="tog tog-icon">
+            <input type="checkbox">
+            <span class="track">
+              <span class="ico-on">✓</span>
+              <span class="ico-off">✕</span>
+              <span class="knob"></span>
+            </span>
+          </label>
+        </div>
+        <div class="variant-desc">Checkmark and X icons inside the track give an extra visual cue beyond color. Useful for accessibility and colorblind users.</div>
+      </div>
+
+      <div class="variant-cell">
+        <div class="variant-label">Variant 03</div>
+        <div class="variant-name">Square / Boxy</div>
+        <div class="demo-area">
+          <label class="tog tog-square">
+            <input type="checkbox">
+            <span class="track"><span class="knob"></span></span>
+          </label>
+        </div>
+        <div class="variant-desc">Rectangular track with squared corners. Feels more technical and precise — suits data-heavy dashboards, dev tools, or industrial interfaces.</div>
+      </div>
+
+      <div class="variant-cell">
+        <div class="variant-label">Variant 04</div>
+        <div class="variant-name">Outlined / Ghost</div>
+        <div class="demo-area">
+          <label class="tog tog-outline">
+            <input type="checkbox">
+            <span class="track"><span class="knob"></span></span>
+          </label>
+        </div>
+        <div class="variant-desc">Transparent fill with a visible border. The knob and border both change color on activation. Light and airy — works well on colored or textured backgrounds.</div>
+      </div>
+
+      <div class="variant-cell">
+        <div class="variant-label">Variant 05</div>
+        <div class="variant-name">Jumbo / Large</div>
+        <div class="demo-area">
+          <label class="tog tog-large">
+            <input type="checkbox">
+            <span class="track"><span class="knob"></span></span>
+          </label>
+        </div>
+        <div class="variant-desc">Larger target area for touch-first interfaces, accessibility needs, or prominent settings. Same mechanics, bigger presence.</div>
+      </div>
+
+      <div class="variant-cell">
+        <div class="variant-label">Variant 06</div>
+        <div class="variant-name">With Text Label</div>
+        <div class="demo-area">
+          <div class="tog-labeled-wrap" id="togLabelWrap">
+            <span class="tog-labeled-text" id="togLabelText" style="color:#aaa">Off</span>
+            <label class="tog tog-labeled" onchange="updateTogLabel(this)">
+              <input type="checkbox">
+              <span class="track"><span class="knob"></span></span>
+            </label>
+          </div>
+        </div>
+        <div class="variant-desc">The toggle updates a live text label showing current state. Eliminates ambiguity — users know immediately what "on" means without inferring from color.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════ FORM ERRORS ══════ -->
+  <div id="sec-error" class="section">
+    <div class="section-intro">
+      <div>
+        <div class="section-heading">Form Error</div>
+      </div>
+      <p class="section-desc">Error states communicate what went wrong and how to fix it. Good form errors are specific, non-alarming, and placed close to the problem. These are six common patterns.</p>
+    </div>
+
+    <div class="variant-grid">
+
+      <!-- 1 -->
+      <div class="variant-cell">
+        <div class="variant-label">Variant 01</div>
+        <div class="variant-name">Inline Message</div>
+        <div class="demo-area">
+          <div class="f-group">
+            <label class="f-label">Email</label>
+            <input class="f-input err1" value="notanemail" readonly>
+            <span class="f-msg">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#ef4444"><circle cx="12" cy="12" r="10"/><path fill="#fff" d="M11 8h2v5h-2zm0 7h2v2h-2z"/></svg>
+              Enter a valid email address.
+            </span>
+          </div>
+        </div>
+        <div class="variant-desc">Error text appears directly below the field. Simple and direct — the most common pattern. Red border reinforces the field is invalid.</div>
+      </div>
+
+      <!-- 2 -->
+      <div class="variant-cell">
+        <div class="variant-label">Variant 02</div>
+        <div class="variant-name">Tooltip Bubble</div>
+        <div class="demo-area" style="padding-bottom: 3rem;">
+          <div class="f-group">
+            <label class="f-label">Username</label>
+            <div class="f-tooltip-wrap">
+              <input class="f-input err2" value="x" readonly>
+              <div class="f-tooltip">Must be at least 3 characters</div>
+            </div>
+          </div>
+        </div>
+        <div class="variant-desc">Error floats as a tooltip below the input. Saves vertical space — good when fields are densely packed. The arrow anchors it visually to the field.</div>
+      </div>
+
+      <!-- 3 -->
+      <div class="variant-cell">
+        <div class="variant-label">Variant 03</div>
+        <div class="variant-name">Icon in Field</div>
+        <div class="demo-area">
+          <div class="f-group">
+            <label class="f-label">Phone number</label>
+            <div class="f-icon-wrap">
+              <input class="f-input err3" value="abc-defg" readonly>
+              <span class="f-icon-right">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </span>
+            </div>
+            <span class="f-msg-sm">Numbers only, no letters.</span>
+          </div>
+        </div>
+        <div class="variant-desc">Alert icon inside the input's right edge gives an immediate cue without disrupting layout. Often combined with a short message below.</div>
+      </div>
+
+      <!-- 4 -->
+      <div class="variant-cell">
+        <div class="variant-label">Variant 04</div>
+        <div class="variant-name">Shake Animation</div>
+        <div class="demo-area">
+          <div class="f-group">
+            <label class="f-label">Password</label>
+            <input class="f-input err4" id="shakeInput" value="••••" readonly>
+            <span class="f-msg">Incorrect password.</span>
+          </div>
+          <button onclick="triggerShake()" style="margin-left:1rem; padding:0.4rem 0.8rem; background:var(--ink); color:#fff; border:none; border-radius:6px; font-size:12px; cursor:pointer; font-family:'DM Sans',sans-serif;">Shake</button>
+        </div>
+        <div class="variant-desc">The field physically shakes left-right on error. A kinesthetic signal — feels like a "no." Especially effective for wrong-password scenarios.</div>
+      </div>
+
+      <!-- 5 -->
+      <div class="variant-cell">
+        <div class="variant-label">Variant 05</div>
+        <div class="variant-name">Banner / Alert Box</div>
+        <div class="demo-area">
+          <div class="f-group" style="width:100%">
+            <label class="f-label">Form</label>
+            <input class="f-input err5" value="John" readonly>
+            <div class="f-banner" style="margin-top:0.35rem">
+              <span class="f-banner-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </span>
+              <div class="f-banner-text">
+                <div class="f-banner-title">Submission failed</div>
+                Last name is required to continue.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="variant-desc">A full-width alert block summarizes the issue. Useful for multi-field forms where errors are caught on submit rather than in real-time.</div>
+      </div>
+
+      <!-- 6 -->
+      <div class="variant-cell">
+        <div class="variant-label">Variant 06</div>
+        <div class="variant-name">Error vs Success</div>
+        <div class="demo-area">
+          <div style="display:flex;flex-direction:column;gap:0.75rem;width:100%">
+            <div class="f-group">
+              <label class="f-label">Username (taken)</label>
+              <input class="f-input err1" value="cooluser99" readonly>
+              <span class="f-msg">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="#ef4444"><circle cx="12" cy="12" r="10"/><path fill="#fff" d="M11 8h2v5h-2zm0 7h2v2h-2z"/></svg>
+                This username is already taken.
+              </span>
+            </div>
+            <div class="f-group">
+              <label class="f-label">Username (available)</label>
+              <input class="f-input succ" value="cooluser_2025" readonly>
+              <span class="f-msg-g">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Username is available!
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="variant-desc">Showing error and success states side by side clarifies the contrast. Green confirmation reduces anxiety and encourages users to keep going.</div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── NAV ──
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ── LIKE BUTTONS ──
+const likeCounts = {};
+
+function toggleLike(btnId, countId, startVal) {
+  const btn = document.getElementById(btnId);
+  const countEl = document.getElementById(countId);
+  const liked = btn.classList.toggle('on');
+  const icon = btn.querySelector('.hico');
+
+  icon.setAttribute('fill', liked ? 'currentColor' : 'none');
+
+  // Handle count if applicable
+  if (countEl && startVal !== null && typeof startVal === 'number') {
+    if (!likeCounts[btnId]) likeCounts[btnId] = startVal;
+    likeCounts[btnId] += liked ? 1 : -1;
+    // keep "1.2k" format for badge
+    if (btnId === 'lc4') {
+      countEl.textContent = likeCounts[btnId] >= 1000
+        ? (likeCounts[btnId]/1000).toFixed(1)+'k'
+        : likeCounts[btnId];
+    } else {
+      countEl.textContent = countEl.textContent.includes('likes')
+        ? likeCounts[btnId] + ' likes'
+        : likeCounts[btnId];
+    }
+  }
+
+  if (countId === 'lcc6b' && countEl) {
+    countEl.textContent = liked ? '♥ Liked!' : 'Click me!';
+  }
+}
+
+// ── TOGGLE LABEL ──
+function updateTogLabel(label) {
+  const checked = label.querySelector('input').checked;
+  const txt = document.getElementById('togLabelText');
+  txt.textContent = checked ? 'On' : 'Off';
+  txt.style.color = checked ? 'var(--green)' : '#aaa';
+  txt.style.fontWeight = checked ? '600' : '400';
+}
+
+// ── SHAKE ──
+function triggerShake() {
+  const el = document.getElementById('shakeInput');
+  el.classList.remove('err4');
+  void el.offsetWidth;
+  el.classList.add('err4');
+}
+</script>
+
+</body>
+</html>
